@@ -1,0 +1,8 @@
+browsecraft/fix-non-official-link.patch
+browsecraft/sync-to-own-server.patch
+browsecraft/restore-sync-service.patch
+browsecraft/sync-without-security-events.patch
+browsecraft/own-profile-folder.patch
+browsecraft/bookmark-move-guard.patch
+browsecraft/sort-folders-menu.patch
+browsecraft/distrust-emudhra.patch

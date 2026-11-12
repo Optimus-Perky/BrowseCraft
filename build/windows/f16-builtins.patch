@@ -1,0 +1,20 @@
+--- a/third_party/compiler-rt/BUILD.gn	2026-10-10 06:48:38.921554968 +0100
++++ b/third_party/compiler-rt/BUILD.gn	2026-10-10 06:48:38.924801354 +0100
+@@ -58,6 +58,17 @@
+     "src/lib/builtins/int_types.h",
+     "src/lib/builtins/muldc3.c",
+     "src/lib/builtins/mulsc3.c",
++
++    # BrowseCraft: half-float conversions Rust core calls on Windows (clang_rt
++    # .builtins is not linked there and Rust compiler_builtins leaves them out).
++    "src/lib/builtins/extendhfdf2.c",
++    "src/lib/builtins/extendhfsf2.c",
++    "src/lib/builtins/fp_extend.h",
++    "src/lib/builtins/fp_extend_impl.inc",
++    "src/lib/builtins/fp_trunc.h",
++    "src/lib/builtins/fp_trunc_impl.inc",
++    "src/lib/builtins/truncdfhf2.c",
++    "src/lib/builtins/truncsfhf2.c",
+   ]
+ 
+   configs += [ "//build/config/compiler:no_chromium_code" ]

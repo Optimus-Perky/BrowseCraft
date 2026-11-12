@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- BrowseCraft option 3, "Lighthouse": your own beacon on your own rock: self-hosted. Original artwork. -->
+  <rect x="16" y="16" width="480" height="480" rx="96" fill="#173b57"/>
+  <path d="M256 150 L470 96 L470 204 Z" fill="#f6d77a" opacity=".55"/>
+  <path d="M256 150 L42 96 L42 204 Z" fill="#f6d77a" opacity=".3"/>
+  <path d="M226 186 H286 L306 400 H206 Z" fill="#f4f1ea"/>
+  <path d="M220 250 H292 L297 300 H215 Z" fill="#c8483c"/>
+  <path d="M211 340 H301 L306 400 H206 Z" fill="#c8483c"/>
+  <rect x="222" y="132" width="68" height="54" rx="10" fill="#f6d77a"/>
+  <path d="M214 132 L256 98 L298 132 Z" fill="#c8483c"/>
+  <path d="M120 420 C180 396 230 404 256 412 C300 424 360 398 392 420 L392 440 L120 440 Z" fill="#0f2a40"/>
+  <rect x="196" y="398" width="120" height="14" rx="7" fill="#0f2a40"/>
+</svg>

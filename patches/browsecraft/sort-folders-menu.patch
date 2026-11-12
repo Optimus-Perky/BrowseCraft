@@ -1,0 +1,168 @@
+diff -ruN a/chrome/app/chrome_command_ids.h b/chrome/app/chrome_command_ids.h
+--- a/chrome/app/chrome_command_ids.h	2026-10-10 10:53:05.450722257 +0100
++++ b/chrome/app/chrome_command_ids.h	2026-10-10 11:08:01.071090941 +0100
+@@ -440,6 +440,7 @@
+ #define IDC_BOOKMARK_BAR_SUBMENU_ALWAYS_SHOW 51026
+ #define IDC_BOOKMARK_BAR_SUBMENU_ONLY_ON_NTP 51027
+ #define IDC_BOOKMARK_BAR_OPEN_ALL_ISOLATED 51028
++#define IDC_BOOKMARK_BAR_SORT_BY_NAME 51029  // BrowseCraft
+ 
+ // Context menu items for Sharing
+ #define IDC_CONTENT_CONTEXT_GENERATE_QR_CODE 51034
+diff -ruN a/chrome/browser/resources/bookmarks/command_manager.ts b/chrome/browser/resources/bookmarks/command_manager.ts
+--- a/chrome/browser/resources/bookmarks/command_manager.ts	2026-10-10 10:53:05.469722286 +0100
++++ b/chrome/browser/resources/bookmarks/command_manager.ts	2026-10-10 11:08:01.088090966 +0100
+@@ -243,6 +243,9 @@
+ 
+   protected isCommandVisible_(command: Command, itemIds: Set<string>): boolean {
+     switch (command) {
++      case Command.SORT_RECURSIVE:
++        return itemIds.size === 1 && this.globalCanEdit_ &&
++            !this.getState().nodes[Array.from(itemIds)[0]!]!.url;
+       case Command.EDIT:
+         return itemIds.size === 1 && this.globalCanEdit_;
+       case Command.PASTE:
+@@ -292,6 +295,11 @@
+   protected isCommandEnabled_(command: Command, itemIds: Set<string>): boolean {
+     const state = this.getState();
+     switch (command) {
++      case Command.SORT_RECURSIVE:
++        return !this.containsMatchingNode_(itemIds, function(node) {
++          return !canEditNode(state, node.id) || !node.children ||
++              node.children.length < 2;
++        });
+       case Command.EDIT:
+       case Command.DELETE:
+       case Command.CUT:
+@@ -474,6 +482,19 @@
+             getLegacyId(state.nodes[state.selectedFolder]));
+         getToastManager().show(loadTimeData.getString('toastFolderSorted'));
+         break;
++      case Command.SORT_RECURSIVE: {
++        const sortFolder = (id: string) => {
++          const node = state.nodes[id];
++          if (!node || node.url || !node.children) {
++            return;
++          }
++          chrome.bookmarkManagerPrivate.sortChildren(getLegacyId(node));
++          node.children.forEach(sortFolder);
++        };
++        Array.from(itemIds).forEach(sortFolder);
++        getToastManager().show(loadTimeData.getString('toastFolderSorted'));
++        break;
++      }
+       case Command.ADD_BOOKMARK:
+         this.ensureEditDialog_().then(
+             dialog => dialog.showAddDialog(false, state.selectedFolder));
+@@ -693,6 +714,9 @@
+       case Command.SORT:
+         label = 'menuSort';
+         break;
++      case Command.SORT_RECURSIVE:
++        label = 'menuSortRecursive';
++        break;
+       case Command.ADD_BOOKMARK:
+         label = 'menuAddBookmark';
+         break;
+@@ -771,6 +795,7 @@
+         const defaultItemTreeCommands = [
+           Command.EDIT,
+           Command.SHOW_IN_FOLDER,
++          Command.SORT_RECURSIVE,
+           Command.DELETE,
+           Command.CUT,
+           Command.COPY,
+@@ -787,6 +812,7 @@
+           return [
+             Command.EDIT,
+             Command.SHOW_IN_FOLDER,
++            Command.SORT_RECURSIVE,
+             Command.CUT,
+             Command.COPY,
+             Command.PASTE,
+diff -ruN a/chrome/browser/resources/bookmarks/constants.ts b/chrome/browser/resources/bookmarks/constants.ts
+--- a/chrome/browser/resources/bookmarks/constants.ts	2026-10-10 10:53:05.465722280 +0100
++++ b/chrome/browser/resources/bookmarks/constants.ts	2026-10-10 11:08:01.084090960 +0100
+@@ -53,8 +53,11 @@
+ 
+   OPEN_ISOLATED = 25,
+ 
++  // BrowseCraft: sort a folder and all its subfolders by name.
++  SORT_RECURSIVE = 26,
++
+   // Append new values to the end of the enum.
+-  MAX_VALUE = 26,
++  MAX_VALUE = 27,
+ }
+ // LINT.ThenChange(//tools/metrics/histograms/metadata/bookmarks/enums.xml:BookmarkManagerCommand)
+ 
+diff -ruN a/chrome/browser/ui/bookmarks/bookmark_context_menu_controller.cc b/chrome/browser/ui/bookmarks/bookmark_context_menu_controller.cc
+--- a/chrome/browser/ui/bookmarks/bookmark_context_menu_controller.cc	2026-10-10 10:53:05.455722264 +0100
++++ b/chrome/browser/ui/bookmarks/bookmark_context_menu_controller.cc	2026-10-10 11:08:01.075090947 +0100
+@@ -310,6 +310,10 @@
+   } else {
+     AddItem(IDC_BOOKMARK_BAR_EDIT, IDS_BOOKMARK_BAR_EDIT);
+   }
++  // BrowseCraft: sort a folder and every folder inside it by name.
++  if (selection_.size() == 1 && selection_[0]->is_folder()) {
++    AddItem(IDC_BOOKMARK_BAR_SORT_BY_NAME, u"Sort by name (with subfolders)");
++  }
+ 
+   AddSeparator();
+   AddItem(IDC_CUT, IDS_CUT);
+@@ -371,6 +375,18 @@
+   menu_model_->AddCheckItemWithStringId(id, localization_id);
+ }
+ 
++// BrowseCraft: sorts `folder` by name, then every folder inside it.
++static void BrowseCraftSortFolderAndSubfolders(
++    bookmarks::BookmarkModel* model,
++    const BookmarkNode* folder) {
++  model->SortChildren(folder);
++  for (const auto& child : folder->children()) {
++    if (child->is_folder()) {
++      BrowseCraftSortFolderAndSubfolders(model, child.get());
++    }
++  }
++}
++
+ void BookmarkContextMenuController::ExecuteCommand(int id, int event_flags) {
+   if (delegate_) {
+     delegate_->WillExecuteCommand(id, selection_);
+@@ -414,6 +430,14 @@
+       break;
+     }
+ 
++    case IDC_BOOKMARK_BAR_SORT_BY_NAME: {
++      bookmarks::BookmarkModel* model =
++          BookmarkModelFactory::GetForBrowserContext(profile_);
++      bookmarks::ScopedGroupBookmarkActions group_sort(model);
++      BrowseCraftSortFolderAndSubfolders(model, selection_[0]);
++      break;
++    }
++
+     case IDC_BOOKMARK_BAR_RENAME_FOLDER:
+     case IDC_BOOKMARK_BAR_EDIT:
+       base::RecordAction(UserMetricsAction("BookmarkBar_ContextMenu_Edit"));
+@@ -778,6 +802,10 @@
+     case IDC_BOOKMARK_BAR_ADD_NEW_BOOKMARK:
+       return can_edit;
+ 
++    case IDC_BOOKMARK_BAR_SORT_BY_NAME:
++      return can_edit && selection_.size() == 1 &&
++             selection_[0]->children().size() > 1;
++
+     case IDC_BOOKMARK_BAR_ALWAYS_SHOW:
+       return !prefs->IsManagedPreference(bookmarks::prefs::kShowBookmarkBar);
+ 
+diff -ruN a/chrome/browser/ui/webui/bookmarks/bookmarks_ui.cc b/chrome/browser/ui/webui/bookmarks/bookmarks_ui.cc
+--- a/chrome/browser/ui/webui/bookmarks/bookmarks_ui.cc	2026-10-10 10:53:05.459722270 +0100
++++ b/chrome/browser/ui/webui/bookmarks/bookmarks_ui.cc	2026-10-10 11:08:01.080090954 +0100
+@@ -152,6 +152,7 @@
+   for (const auto& str : kStrings) {
+     AddLocalizedString(source, str.name, str.id);
+   }
++  source->AddString("menuSortRecursive", u"Sort by name (with subfolders)");  // BrowseCraft
+ 
+   source->AddBoolean("menuSimplification",
+                      features::IsMenuSimplificationEnabled());

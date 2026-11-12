@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- BrowseCraft's own Group Policy settings (BrowseCraft's Chromium settings still come from
+     Chromium's templates). Copy browsecraft.admx to PolicyDefinitions and en-US\browsecraft.adml
+     to PolicyDefinitions\en-US (the central store on SYSVOL, or C:\Windows on one PC). -->
+<policyDefinitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   revision="1.1" schemaVersion="1.0" xmlns="http://schemas.microsoft.com/GroupPolicy/2006/07/PolicyDefinitions">
+  <policyNamespaces>
+    <target prefix="browsecraft" namespace="BrowseCraft.Policies.BrowseCraft" />
+    <using prefix="windows" namespace="Microsoft.Policies.Windows" />
+  </policyNamespaces>
+  <resources minRequiredRevision="1.0" />
+  <supportedOn>
+    <definitions>
+      <definition name="SUPPORTED_BrowseCraft155" displayName="$(string.SUPPORTED_BrowseCraft155)" />
+    </definitions>
+  </supportedOn>
+  <categories>
+    <category name="BrowseCraft" displayName="$(string.BrowseCraft)" />
+  </categories>
+  <policies>
+    <policy name="SyncServerUrl" class="Both" displayName="$(string.SyncServerUrl)"
+            explainText="$(string.SyncServerUrl_Explain)" presentation="$(presentation.SyncServerUrl)"
+            key="Software\Policies\BrowseCraft">
+      <parentCategory ref="BrowseCraft" />
+      <supportedOn ref="SUPPORTED_BrowseCraft155" />
+      <elements>
+        <text id="SyncServerUrl" valueName="SyncServerUrl" required="true" />
+      </elements>
+    </policy>
+    <policy name="ExtensionStoreUrl" class="Both" displayName="$(string.ExtensionStoreUrl)"
+            explainText="$(string.ExtensionStoreUrl_Explain)" presentation="$(presentation.ExtensionStoreUrl)"
+            key="Software\Policies\BrowseCraft">
+      <parentCategory ref="BrowseCraft" />
+      <supportedOn ref="SUPPORTED_BrowseCraft155" />
+      <elements>
+        <text id="ExtensionStoreUrl" valueName="ExtensionStoreUrl" required="true" />
+      </elements>
+    </policy>
+  </policies>
+</policyDefinitions>

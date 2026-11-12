@@ -1,0 +1,44 @@
+diff -ruN a/chrome/browser/ui/bookmarks/bookmark_ui_operations_helper.cc b/chrome/browser/ui/bookmarks/bookmark_ui_operations_helper.cc
+--- a/chrome/browser/ui/bookmarks/bookmark_ui_operations_helper.cc	2026-10-10 11:20:48.282295576 +0100
++++ b/chrome/browser/ui/bookmarks/bookmark_ui_operations_helper.cc	2026-10-10 11:20:51.194300255 +0100
+@@ -472,6 +472,11 @@
+   CHECK(!moved_nodes.empty());
+   for (const auto& moved_node : moved_nodes) {
+     CHECK(!model_->client()->IsNodeManaged(moved_node));
++    // BrowseCraft: a folder dropped into itself or one of its own subfolders
++    // is left where it is; the rest of the drop still happens.
++    if (parent->HasAncestor(moved_node)) {
++      continue;
++    }
+     model_->Move(moved_node, parent, index_to_add_at);
+     index_to_add_at = parent->GetIndexOf(moved_node).value() + 1;
+   }
+@@ -626,6 +631,12 @@
+ 
+   for (const auto& moved_node : moved_nodes) {
+     CHECK(!model()->client()->IsNodeManaged(moved_node));
++    // BrowseCraft: skip a folder dropped into itself or its own subfolders.
++    const bookmarks::BookmarkNode* target_folder =
++        parent_folder().as_non_permanent_folder();
++    if (target_folder && target_folder->HasAncestor(moved_node)) {
++      continue;
++    }
+     merged_surface_service_->Move(moved_node, parent_folder(), index_to_add_at,
+                                   browser);
+     index_to_add_at++;
+diff -ruN a/components/bookmarks/browser/bookmark_model.cc b/components/bookmarks/browser/bookmark_model.cc
+--- a/components/bookmarks/browser/bookmark_model.cc	2026-10-10 10:45:18.570009117 +0100
++++ b/components/bookmarks/browser/bookmark_model.cc	2026-10-10 11:20:51.196300258 +0100
+@@ -574,6 +574,12 @@
+   DCHECK(!is_root_node(new_parent));
+   DCHECK(!is_permanent_node(node));
+   DCHECK(!new_parent->HasAncestor(node));
++  // BrowseCraft: never move a folder into itself or one of its own subfolders.
++  // The check above is debug-only; in a release build the move makes a loop in
++  // the tree and the browser hangs walking it.
++  if (new_parent->HasAncestor(node)) {
++    return;
++  }
+ 
+   SCOPED_CRASH_KEY_NUMBER("BookmarkModelMove", "newParentType",
+                           new_parent->type());

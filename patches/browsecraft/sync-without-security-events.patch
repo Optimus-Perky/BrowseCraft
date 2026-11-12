@@ -1,0 +1,34 @@
+diff -ruN a/chrome/browser/sync/chrome_sync_controller_builder.cc b/chrome/browser/sync/chrome_sync_controller_builder.cc
+--- a/chrome/browser/sync/chrome_sync_controller_builder.cc	2026-10-09 22:14:07.827212293 +0000
++++ b/chrome/browser/sync/chrome_sync_controller_builder.cc	2026-10-09 22:14:07.828112324 +0000
+@@ -195,6 +195,8 @@
+   syncer::RepeatingDataTypeStoreFactory data_type_store_factory =
+       data_type_store_service_.value()->GetStoreFactory();
+ 
++  // BrowseCraft: SECURITY_EVENTS only when there is a recorder.
++  if (security_event_recorder_.has_value()) {
+     syncer::DataTypeControllerDelegate* security_events_delegate =
+         security_event_recorder_.value()->GetControllerDelegate().get();
+     // Forward both full-sync and transport-only modes to the same delegate,
+@@ -207,6 +209,7 @@
+         /*delegate_for_transport_mode=*/
+         std::make_unique<syncer::ForwardingDataTypeControllerDelegate>(
+             security_events_delegate)));
++  }
+ 
+ #if BUILDFLAG(ENABLE_EXTENSIONS_CORE)
+     if (extension_sync_service_.value()) {
+diff -ruN a/chrome/browser/sync/chrome_sync_controller_builder.h b/chrome/browser/sync/chrome_sync_controller_builder.h
+--- a/chrome/browser/sync/chrome_sync_controller_builder.h	2026-10-09 22:14:07.826864584 +0000
++++ b/chrome/browser/sync/chrome_sync_controller_builder.h	2026-10-09 22:14:07.827564921 +0000
+@@ -176,6 +176,10 @@
+       ptr_.emplace(std::move(ptr));
+     }
+ 
++    // BrowseCraft: whether Set() was called (ungoogled-chromium never sets
++    // the security event recorder).
++    bool has_value() const { return ptr_.has_value(); }
++
+     // Set() must have been called before.
+     Ptr value() const {
+       CHECK(ptr_.has_value());

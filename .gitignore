@@ -1,0 +1,10 @@
+target/
+ref/
+data/
+*.db
+assets/logo-options/round3/*.geojson
+*.png
+!assets/logo-options/**/*.png
+build/branding/out/
+build/branding/work/
+build/branding/resvg

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- BrowseCraft option 2, "Orbit B": a bold B with two sync arcs circling it. Original artwork. -->
+  <rect x="16" y="16" width="480" height="480" rx="96" fill="#1f2a44"/>
+  <path d="M120 180 A150 150 0 0 1 380 150" fill="none" stroke="#f2b544" stroke-width="26" stroke-linecap="round"/>
+  <path d="M392 150 l-6 -46 l-40 30 z" fill="#f2b544"/>
+  <path d="M392 332 A150 150 0 0 1 132 362" fill="none" stroke="#f2b544" stroke-width="26" stroke-linecap="round"/>
+  <path d="M120 362 l6 46 l40 -30 z" fill="#f2b544"/>
+  <path d="M204 168 H272 C318 168 342 190 342 222 C342 246 328 262 306 268 C334 274 352 294 352 324 C352 360 326 384 276 384 H204 Z
+           M246 206 V252 H268 C288 252 298 244 298 229 C298 214 288 206 268 206 Z
+           M246 288 V346 H272 C296 346 308 336 308 317 C308 298 296 288 272 288 Z" fill="#f5f2ea" fill-rule="evenodd"/>
+</svg>

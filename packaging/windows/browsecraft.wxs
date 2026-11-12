@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- BrowseCraft MSI (WiX 3.14), shipped inside the BrowseCraft.exe installer (bundle.wxs). Built by
+     packaging/windows/build-installer.sh on a Windows host (WiX needs msi.dll). The program
+     files come from the Windows build zip, harvested by heat into files.wxs (component group
+     AppFiles); this file adds what the zip does not have.
+
+     Per machine, in Program Files. Shortcuts are plain ones to chrome.exe, not advertised, so a
+     taskbar pin made from them points at the program and survives every upgrade. An upgrade
+     removes the old version first (afterInstallInitialize): builds of one Chromium version
+     carry the same file versions, which Windows Installer would otherwise not replace.
+
+     Profiles (%LOCALAPPDATA%\BrowseCraft\User Data) belong to the people using it and are not
+     touched, by an upgrade or an uninstall.
+
+     Widevine: not ours to ship. Update-Widevine.ps1 copies the PC's own (from Edge or Chrome)
+     beside chrome.dll at install and keeps it current from a scheduled task; uninstall removes
+     both. -->
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
+  <Product Id="*" Name="BrowseCraft" Language="1033" Version="$(var.MsiVersion)"
+           Manufacturer="BrowseCraft" UpgradeCode="6d2a9f41-7b3c-4e58-a0d6-1c94e8b25f37">
+    <Package InstallerVersion="500" Compressed="yes" InstallScope="perMachine" Platform="x64"
+             Description="BrowseCraft v$(var.BcVersion)" Comments="Web browser. BrowseCraft v$(var.BcVersion), installer $(var.Version)." />
+    <MediaTemplate EmbedCab="yes" CompressionLevel="high" />
+    <MajorUpgrade AllowSameVersionUpgrades="yes" DowngradeErrorMessage="A newer version of BrowseCraft is already installed."
+                  Schedule="afterInstallInitialize" />
+    <!-- The installer (the bundle) is what Add/Remove Programs lists. -->
+    <Property Id="ARPSYSTEMCOMPONENT" Value="1" />
+
+    <Property Id="INSTALLDIR" Secure="yes">
+      <RegistrySearch Id="PreviousInstallDir" Root="HKLM" Key="Software\BrowseCraft" Name="InstallDir" Type="raw" Win64="yes" />
+    </Property>
+
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="ProgramFiles64Folder">
+        <Directory Id="INSTALLDIR" Name="BrowseCraft">
+          <Component Id="WidevineScript" Guid="b07c3e15-6a24-4d9f-8e31-5f2a7c90d148" Win64="yes">
+            <File Id="widevineps1" Name="Update-Widevine.ps1" Source="$(var.BuildDir)/Update-Widevine.ps1" KeyPath="yes" />
+          </Component>
+
+          <!-- The shortcuts, and BrowseCraft as a browser Windows can make the default
+               (Settings > Apps > Default apps). Windows does not let an installer make itself
+               the default. -->
+          <Component Id="Integration" Guid="4f8e2b67-d913-4a05-b6c2-8e17a3d59f20" Win64="yes">
+            <RegistryValue Root="HKLM" Key="Software\BrowseCraft" Name="InstallDir" Value="[INSTALLDIR]" Type="string" KeyPath="yes" />
+            <Shortcut Id="StartMenuShortcut" Directory="ProgramMenuFolder" Name="BrowseCraft" Description="Browse the web"
+                      Target="[INSTALLDIR]chrome.exe" WorkingDirectory="INSTALLDIR" />
+            <Shortcut Id="DesktopShortcut" Directory="DesktopFolder" Name="BrowseCraft" Description="Browse the web"
+                      Target="[INSTALLDIR]chrome.exe" WorkingDirectory="INSTALLDIR" />
+
+            <RegistryValue Root="HKLM" Key="Software\Clients\StartMenuInternet\BrowseCraft" Value="BrowseCraft" Type="string" />
+            <RegistryValue Root="HKLM" Key="Software\Clients\StartMenuInternet\BrowseCraft\DefaultIcon" Value="&quot;[INSTALLDIR]chrome.exe&quot;,0" Type="string" />
+            <RegistryValue Root="HKLM" Key="Software\Clients\StartMenuInternet\BrowseCraft\shell\open\command" Value="&quot;[INSTALLDIR]chrome.exe&quot;" Type="string" />
+            <RegistryValue Root="HKLM" Key="Software\Clients\StartMenuInternet\BrowseCraft\Capabilities" Name="ApplicationName" Value="BrowseCraft" Type="string" />
+            <RegistryValue Root="HKLM" Key="Software\Clients\StartMenuInternet\BrowseCraft\Capabilities" Name="ApplicationDescription" Value="Browse the web" Type="string" />
+            <RegistryValue Root="HKLM" Key="Software\Clients\StartMenuInternet\BrowseCraft\Capabilities" Name="ApplicationIcon" Value="&quot;[INSTALLDIR]chrome.exe&quot;,0" Type="string" />
+            <RegistryValue Root="HKLM" Key="Software\Clients\StartMenuInternet\BrowseCraft\Capabilities\StartMenu" Name="StartMenuInternet" Value="BrowseCraft" Type="string" />
+            <RegistryValue Root="HKLM" Key="Software\Clients\StartMenuInternet\BrowseCraft\Capabilities\URLAssociations" Name="http" Value="BCraftHTM" Type="string" />
+            <RegistryValue Root="HKLM" Key="Software\Clients\StartMenuInternet\BrowseCraft\Capabilities\URLAssociations" Name="https" Value="BCraftHTM" Type="string" />
+            <RegistryValue Root="HKLM" Key="Software\Clients\StartMenuInternet\BrowseCraft\Capabilities\FileAssociations" Name=".htm" Value="BCraftHTM" Type="string" />
+            <RegistryValue Root="HKLM" Key="Software\Clients\StartMenuInternet\BrowseCraft\Capabilities\FileAssociations" Name=".html" Value="BCraftHTM" Type="string" />
+            <RegistryValue Root="HKLM" Key="Software\Clients\StartMenuInternet\BrowseCraft\Capabilities\FileAssociations" Name=".shtml" Value="BCraftHTM" Type="string" />
+            <RegistryValue Root="HKLM" Key="Software\Clients\StartMenuInternet\BrowseCraft\Capabilities\FileAssociations" Name=".xht" Value="BCraftHTM" Type="string" />
+            <RegistryValue Root="HKLM" Key="Software\Clients\StartMenuInternet\BrowseCraft\Capabilities\FileAssociations" Name=".xhtml" Value="BCraftHTM" Type="string" />
+            <RegistryValue Root="HKLM" Key="Software\Clients\StartMenuInternet\BrowseCraft\Capabilities\FileAssociations" Name=".svg" Value="BCraftHTM" Type="string" />
+            <RegistryValue Root="HKLM" Key="Software\Clients\StartMenuInternet\BrowseCraft\Capabilities\FileAssociations" Name=".webp" Value="BCraftHTM" Type="string" />
+            <RegistryValue Root="HKLM" Key="Software\Clients\StartMenuInternet\BrowseCraft\Capabilities\FileAssociations" Name=".pdf" Value="BCraftPDF" Type="string" />
+            <RegistryValue Root="HKLM" Key="Software\RegisteredApplications" Name="BrowseCraft" Value="Software\Clients\StartMenuInternet\BrowseCraft\Capabilities" Type="string" />
+
+            <RegistryValue Root="HKLM" Key="Software\Classes\BCraftHTM" Value="BrowseCraft HTML Document" Type="string" />
+            <RegistryValue Root="HKLM" Key="Software\Classes\BCraftHTM\DefaultIcon" Value="&quot;[INSTALLDIR]chrome.exe&quot;,0" Type="string" />
+            <RegistryValue Root="HKLM" Key="Software\Classes\BCraftHTM\shell\open\command" Value="&quot;[INSTALLDIR]chrome.exe&quot; --single-argument %1" Type="string" />
+            <RegistryValue Root="HKLM" Key="Software\Classes\BCraftHTM\Application" Name="ApplicationName" Value="BrowseCraft" Type="string" />
+            <RegistryValue Root="HKLM" Key="Software\Classes\BCraftHTM\Application" Name="ApplicationIcon" Value="&quot;[INSTALLDIR]chrome.exe&quot;,0" Type="string" />
+            <RegistryValue Root="HKLM" Key="Software\Classes\BCraftPDF" Value="BrowseCraft PDF Document" Type="string" />
+            <RegistryValue Root="HKLM" Key="Software\Classes\BCraftPDF\DefaultIcon" Value="&quot;[INSTALLDIR]chrome.exe&quot;,0" Type="string" />
+            <RegistryValue Root="HKLM" Key="Software\Classes\BCraftPDF\shell\open\command" Value="&quot;[INSTALLDIR]chrome.exe&quot; --single-argument %1" Type="string" />
+            <RegistryValue Root="HKLM" Key="Software\Classes\BCraftPDF\Application" Name="ApplicationName" Value="BrowseCraft" Type="string" />
+            <RegistryValue Root="HKLM" Key="Software\Classes\BCraftPDF\Application" Name="ApplicationIcon" Value="&quot;[INSTALLDIR]chrome.exe&quot;,0" Type="string" />
+          </Component>
+        </Directory>
+      </Directory>
+      <Directory Id="ProgramMenuFolder" />
+      <Directory Id="DesktopFolder" />
+    </Directory>
+
+    <!-- Widevine: copied in once the files are, taken out before they go. Not fatal either
+         way: a PC without Edge or Chrome still gets a working browser. -->
+    <SetProperty Id="WidevineInstall" Before="WidevineInstall" Sequence="execute"
+                 Value="&quot;[System64Folder]WindowsPowerShell\v1.0\powershell.exe&quot; -NoProfile -ExecutionPolicy Bypass -File &quot;[INSTALLDIR]Update-Widevine.ps1&quot; -Install" />
+    <CustomAction Id="WidevineInstall" BinaryKey="WixCA" DllEntry="WixQuietExec64" Execute="deferred" Impersonate="no" Return="ignore" />
+    <SetProperty Id="WidevineUninstall" Before="WidevineUninstall" Sequence="execute"
+                 Value="&quot;[System64Folder]WindowsPowerShell\v1.0\powershell.exe&quot; -NoProfile -ExecutionPolicy Bypass -File &quot;[INSTALLDIR]Update-Widevine.ps1&quot; -Uninstall" />
+    <CustomAction Id="WidevineUninstall" BinaryKey="WixCA" DllEntry="WixQuietExec64" Execute="deferred" Impersonate="no" Return="ignore" />
+    <InstallExecuteSequence>
+      <Custom Action="WidevineInstall" After="InstallFiles">NOT REMOVE="ALL"</Custom>
+      <Custom Action="WidevineUninstall" Before="RemoveFiles">REMOVE="ALL"</Custom>
+    </InstallExecuteSequence>
+
+    <Icon Id="browsecraft.ico" SourceFile="$(var.BuildDir)/browsecraft.ico" />
+    <Property Id="ARPPRODUCTICON" Value="browsecraft.ico" />
+
+    <Feature Id="Main" Title="BrowseCraft" Level="1">
+      <ComponentGroupRef Id="AppFiles" />
+      <ComponentRef Id="WidevineScript" />
+      <ComponentRef Id="Integration" />
+    </Feature>
+  </Product>
+</Wix>

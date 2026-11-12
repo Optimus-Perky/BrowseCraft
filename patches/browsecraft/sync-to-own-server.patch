@@ -1,0 +1,589 @@
+diff -ruN a/chrome/browser/ui/webui/BUILD.gn b/chrome/browser/ui/webui/BUILD.gn
+--- a/chrome/browser/ui/webui/BUILD.gn	2026-10-09 19:00:23.507601026 +0000
++++ b/chrome/browser/ui/webui/BUILD.gn	2026-10-09 19:00:23.508065969 +0000
+@@ -31,6 +31,8 @@
+ 
+ source_set("configs") {
+   sources = [
++    "browsecraft/browsecraft_ui.cc",
++    "browsecraft/browsecraft_ui.h",
+     "chrome_untrusted_web_ui_configs.cc",
+     "chrome_untrusted_web_ui_configs.h",
+     "chrome_web_ui_configs.cc",
+diff -ruN a/chrome/browser/ui/webui/browsecraft/browsecraft_ui.cc b/chrome/browser/ui/webui/browsecraft/browsecraft_ui.cc
+--- a/chrome/browser/ui/webui/browsecraft/browsecraft_ui.cc	1970-01-01 00:00:00.000000000 +0000
++++ b/chrome/browser/ui/webui/browsecraft/browsecraft_ui.cc	2026-10-09 19:00:23.501318177 +0000
+@@ -0,0 +1,381 @@
++// Copyright 2026 The BrowseCraft Authors
++// Use of this source code is governed by a BSD-style license that can be
++// found in the LICENSE file.
++
++#include "chrome/browser/ui/webui/browsecraft/browsecraft_ui.h"
++
++#include <memory>
++#include <string>
++#include <utility>
++
++#include "base/functional/bind.h"
++#include "base/json/json_reader.h"
++#include "base/json/json_writer.h"
++#include "base/memory/raw_ptr.h"
++#include "base/memory/ref_counted_memory.h"
++#include "base/memory/weak_ptr.h"
++#include "base/strings/string_number_conversions.h"
++#include "base/strings/string_util.h"
++#include "base/values.h"
++#include "chrome/browser/lifetime/application_lifetime.h"
++#include "chrome/browser/profiles/profile.h"
++#include "components/prefs/pref_service.h"
++#include "components/sync/base/pref_names.h"
++#include "content/public/browser/storage_partition.h"
++#include "content/public/browser/web_ui.h"
++#include "content/public/browser/web_ui_data_source.h"
++#include "content/public/browser/web_ui_message_handler.h"
++#include "net/base/net_errors.h"
++#include "net/base/network_interfaces.h"
++#include "net/http/http_response_headers.h"
++#include "net/traffic_annotation/network_traffic_annotation.h"
++#include "services/network/public/cpp/resource_request.h"
++#include "services/network/public/cpp/shared_url_loader_factory.h"
++#include "services/network/public/cpp/simple_url_loader.h"
++#include "services/network/public/mojom/url_response_head.mojom.h"
++#include "url/gurl.h"
++
++namespace {
++
++constexpr char kPage[] = R"(<!doctype html>
++<html lang="en">
++<head>
++<meta charset="utf-8">
++<title>BrowseCraft sync</title>
++<link rel="stylesheet" href="browsecraft.css">
++<script src="browsecraft.js"></script>
++</head>
++<body>
++<main>
++  <h1>BrowseCraft sync</h1>
++  <p class="lead">Sign in to your own BrowseCraft server and your bookmarks,
++  passwords, history, open tabs, extensions and settings follow you to every
++  PC you sign in on. No Google or Microsoft account involved.</p>
++  <section id="signed-in" hidden>
++    <p>Signed in to <b id="who-server"></b> as <b id="who-user"></b>.</p>
++    <p id="restart-note" class="note" hidden>Restart BrowseCraft to start
++    syncing.</p>
++    <div class="buttons">
++      <button id="restart" hidden>Restart now</button>
++      <button id="sign-out" class="plain">Sign out</button>
++    </div>
++  </section>
++  <form id="form" hidden>
++    <label>Server <input id="server" type="text" autocomplete="url"
++      placeholder="https://sync.example.home" required></label>
++    <label>User name <input id="user" type="text" autocomplete="username"
++      required></label>
++    <label>Password <input id="password" type="password"
++      autocomplete="current-password" required></label>
++    <div class="buttons"><button id="sign-in" type="submit">Sign in</button></div>
++  </form>
++  <p id="error" class="error" hidden></p>
++</main>
++</body>
++</html>
++)";
++
++constexpr char kStyle[] = R"(
++:root { color-scheme: light dark; --accent: #2f6f5e; --text: #1f2328;
++  --dim: #5b636b; --bg: #f6f7f8; --card: #ffffff; --line: #d9dde1; }
++@media (prefers-color-scheme: dark) {
++  :root { --accent: #5fb39b; --text: #e6e8ea; --dim: #a3aab1; --bg: #1c1f22;
++    --card: #25292d; --line: #3a3f44; }
++}
++body { margin: 0; background: var(--bg); color: var(--text);
++  font: 15px/1.5 system-ui, sans-serif; }
++main { max-width: 34em; margin: 4em auto; background: var(--card);
++  border: 1px solid var(--line); border-radius: 10px; padding: 2em 2.4em; }
++h1 { margin: 0 0 .4em; font-size: 1.6em; }
++.lead { color: var(--dim); }
++label { display: block; margin: 1em 0 0; font-weight: 600; }
++input { display: block; width: 100%; box-sizing: border-box; margin-top: .3em;
++  padding: .55em .7em; border: 1px solid var(--line); border-radius: 6px;
++  background: var(--bg); color: var(--text); font: inherit; }
++.buttons { margin-top: 1.4em; display: flex; gap: .7em; }
++button { padding: .55em 1.3em; border: 0; border-radius: 6px; font: inherit;
++  font-weight: 600; background: var(--accent); color: #fff; cursor: pointer; }
++button.plain { background: transparent; color: var(--accent);
++  border: 1px solid var(--line); }
++button:disabled { opacity: .6; cursor: default; }
++.error { color: #c0392b; }
++.note { color: var(--dim); }
++)";
++
++constexpr char kScript[] = R"(
++'use strict';
++const $ = (id) => document.getElementById(id);
++function show(status) {
++  $('error').hidden = true;
++  $('signed-in').hidden = !status.signedIn;
++  $('form').hidden = status.signedIn;
++  if (status.signedIn) {
++    $('who-server').textContent = status.server;
++    $('who-user').textContent = status.user;
++  }
++  $('restart-note').hidden = !status.needsRestart;
++  $('restart').hidden = !status.needsRestart;
++}
++window.browsecraft = {
++  onStatus(status) { show(status); },
++  onSignIn(result) {
++    $('sign-in').disabled = false;
++    if (result.ok) {
++      $('password').value = '';
++      show(result.status);
++    } else {
++      $('error').textContent = result.error;
++      $('error').hidden = false;
++    }
++  },
++};
++document.addEventListener('DOMContentLoaded', () => {
++  $('form').addEventListener('submit', (e) => {
++    e.preventDefault();
++    $('sign-in').disabled = true;
++    $('error').hidden = true;
++    chrome.send('signIn', [$('server').value, $('user').value,
++                           $('password').value]);
++  });
++  $('sign-out').addEventListener('click', () => chrome.send('signOut'));
++  $('restart').addEventListener('click', () => chrome.send('restart'));
++  chrome.send('getStatus');
++});
++)";
++
++bool ShouldHandle(const std::string& path) {
++  return path.empty() || path == "index.html" || path == "browsecraft.js" ||
++         path == "browsecraft.css";
++}
++
++void Handle(const std::string& path,
++            content::WebUIDataSource::GotDataCallback callback) {
++  std::string body = path == "browsecraft.js"    ? kScript
++                     : path == "browsecraft.css" ? kStyle
++                                                 : kPage;
++  std::move(callback).Run(
++      base::MakeRefCounted<base::RefCountedString>(std::move(body)));
++}
++
++constexpr net::NetworkTrafficAnnotationTag kTrafficAnnotation =
++    net::DefineNetworkTrafficAnnotation("browsecraft_sign_in", R"(
++        semantics {
++          sender: "BrowseCraft sync"
++          description:
++            "Signs in to the BrowseCraft sync server the user typed in."
++          trigger: "The user signs in or out on chrome://browsecraft."
++          data: "The user name and password the user typed."
++          destination: OTHER
++          destination_other: "The user's own BrowseCraft sync server."
++        }
++        policy {
++          cookies_allowed: NO
++          setting: "Only when the user signs in on chrome://browsecraft."
++          policy_exception_justification: "User-initiated."
++        })");
++
++// "sync.example.home" -> "https://sync.example.home"; no trailing slash.
++std::string NormaliseServer(std::string server) {
++  base::TrimWhitespaceASCII(server, base::TRIM_ALL, &server);
++  while (!server.empty() && server.back() == '/') {
++    server.pop_back();
++  }
++  if (server.find("://") == std::string::npos) {
++    server = "https://" + server;
++  }
++  return server;
++}
++
++class BrowseCraftHandler : public content::WebUIMessageHandler {
++ public:
++  explicit BrowseCraftHandler(Profile* profile) : profile_(profile) {}
++  BrowseCraftHandler(const BrowseCraftHandler&) = delete;
++  BrowseCraftHandler& operator=(const BrowseCraftHandler&) = delete;
++  ~BrowseCraftHandler() override = default;
++
++  void RegisterMessages() override {
++    web_ui()->RegisterMessageCallback(
++        "getStatus", base::BindRepeating(&BrowseCraftHandler::GetStatus,
++                                         base::Unretained(this)));
++    web_ui()->RegisterMessageCallback(
++        "signIn", base::BindRepeating(&BrowseCraftHandler::SignIn,
++                                      base::Unretained(this)));
++    web_ui()->RegisterMessageCallback(
++        "signOut", base::BindRepeating(&BrowseCraftHandler::SignOut,
++                                       base::Unretained(this)));
++    web_ui()->RegisterMessageCallback(
++        "restart", base::BindRepeating(&BrowseCraftHandler::Restart,
++                                       base::Unretained(this)));
++  }
++
++ private:
++  PrefService* prefs() { return profile_->GetPrefs(); }
++
++  base::DictValue Status() {
++    std::string server =
++        prefs()->GetString(syncer::prefs::kBrowseCraftSyncServer);
++    const std::string token =
++        prefs()->GetString(syncer::prefs::kBrowseCraftSyncToken);
++    const bool signed_in = !server.empty() && !token.empty();
++    if (base::EndsWith(server, "/sync")) {
++      server.resize(server.size() - 5);
++    }
++    base::DictValue d;
++    d.Set("signedIn", signed_in);
++    d.Set("server", server);
++    d.Set("user", prefs()->GetString(syncer::prefs::kBrowseCraftSyncUser));
++    // Sync picks up a change of server when BrowseCraft starts.
++    d.Set("needsRestart", signed_in != started_signed_in_);
++    return d;
++  }
++
++  void GetStatus(const base::ListValue& args) {
++    AllowJavascript();
++    if (!checked_start_) {
++      checked_start_ = true;
++      started_signed_in_ =
++          !prefs()->GetString(syncer::prefs::kBrowseCraftSyncToken).empty();
++    }
++    CallJavascriptFunction("browsecraft.onStatus", base::Value(Status()));
++  }
++
++  void SignIn(const base::ListValue& args) {
++    AllowJavascript();
++    if (args.size() < 3 || !args[0].is_string() || !args[1].is_string() ||
++        !args[2].is_string()) {
++      return;
++    }
++    server_ = NormaliseServer(args[0].GetString());
++    user_ = args[1].GetString();
++    const GURL url(server_ + "/api/sign-in");
++    if (!url.is_valid() || !url.SchemeIsHTTPOrHTTPS()) {
++      Fail("That server address doesn't look right.");
++      return;
++    }
++    base::DictValue body;
++    body.Set("user", user_);
++    body.Set("password", args[2].GetString());
++    body.Set("device", net::GetHostName());
++    std::string json;
++    base::JSONWriter::Write(body, &json);
++
++    auto request = std::make_unique<network::ResourceRequest>();
++    request->url = url;
++    request->method = "POST";
++    request->credentials_mode = network::mojom::CredentialsMode::kOmit;
++    loader_ = network::SimpleURLLoader::Create(std::move(request),
++                                               kTrafficAnnotation);
++    loader_->AttachStringForUpload(json, "application/json");
++    loader_->SetAllowHttpErrorResults(true);
++    loader_->DownloadToString(
++        profile_->GetDefaultStoragePartition()
++            ->GetURLLoaderFactoryForBrowserProcess()
++            .get(),
++        base::BindOnce(&BrowseCraftHandler::OnSignIn,
++                       weak_factory_.GetWeakPtr()),
++        1 << 20);
++  }
++
++  void OnSignIn(std::optional<std::string> body) {
++    const int code = loader_ && loader_->ResponseInfo() &&
++                             loader_->ResponseInfo()->headers
++                         ? loader_->ResponseInfo()->headers->response_code()
++                         : 0;
++    const int net_error = loader_ ? loader_->NetError() : 0;
++    loader_.reset();
++    std::optional<base::DictValue> reply =
++        body ? base::JSONReader::ReadDict(*body,
++                                          base::JSON_PARSE_CHROMIUM_EXTENSIONS)
++             : std::nullopt;
++    if (code == 200 && reply) {
++      const std::string* token = reply->FindString("token");
++      if (token && !token->empty()) {
++        prefs()->SetString(syncer::prefs::kBrowseCraftSyncServer,
++                           server_ + "/sync");
++        prefs()->SetString(syncer::prefs::kBrowseCraftSyncToken, *token);
++        prefs()->SetString(syncer::prefs::kBrowseCraftSyncUser, user_);
++        prefs()->SetBoolean(syncer::prefs::kEnableLocalSyncBackend, true);
++        base::DictValue result;
++        result.Set("ok", true);
++        result.Set("status", Status());
++        CallJavascriptFunction("browsecraft.onSignIn", base::Value(std::move(result)));
++        return;
++      }
++    }
++    if (reply && reply->FindString("error")) {
++      Fail(*reply->FindString("error"));
++    } else if (code == 0) {
++      Fail("Couldn't reach that server (" + net::ErrorToShortString(net_error) +
++           ").");
++    } else {
++      Fail("That isn't a BrowseCraft server (it answered " +
++           base::NumberToString(code) + ").");
++    }
++  }
++
++  void Fail(const std::string& error) {
++    base::DictValue result;
++    result.Set("ok", false);
++    result.Set("error", error);
++    CallJavascriptFunction("browsecraft.onSignIn", base::Value(std::move(result)));
++  }
++
++  void SignOut(const base::ListValue& args) {
++    AllowJavascript();
++    // Tell the server the token is finished with (best effort).
++    std::string server =
++        prefs()->GetString(syncer::prefs::kBrowseCraftSyncServer);
++    const std::string token =
++        prefs()->GetString(syncer::prefs::kBrowseCraftSyncToken);
++    if (base::EndsWith(server, "/sync")) {
++      server.resize(server.size() - 5);
++    }
++    const GURL url(server + "/api/sign-out");
++    if (url.is_valid() && !token.empty()) {
++      auto request = std::make_unique<network::ResourceRequest>();
++      request->url = url;
++      request->method = "POST";
++      request->credentials_mode = network::mojom::CredentialsMode::kOmit;
++      request->headers.SetHeader("Authorization", "Bearer " + token);
++      sign_out_loader_ = network::SimpleURLLoader::Create(std::move(request),
++                                                          kTrafficAnnotation);
++      sign_out_loader_->DownloadHeadersOnly(
++          profile_->GetDefaultStoragePartition()
++              ->GetURLLoaderFactoryForBrowserProcess()
++              .get(),
++          base::BindOnce([](scoped_refptr<net::HttpResponseHeaders>) {}));
++    }
++    prefs()->ClearPref(syncer::prefs::kBrowseCraftSyncServer);
++    prefs()->ClearPref(syncer::prefs::kBrowseCraftSyncToken);
++    prefs()->ClearPref(syncer::prefs::kBrowseCraftSyncUser);
++    prefs()->SetBoolean(syncer::prefs::kEnableLocalSyncBackend, false);
++    CallJavascriptFunction("browsecraft.onStatus", base::Value(Status()));
++  }
++
++  void Restart(const base::ListValue& args) { chrome::AttemptRestart(); }
++
++  raw_ptr<Profile> profile_;
++  std::string server_;
++  std::string user_;
++  bool checked_start_ = false;
++  bool started_signed_in_ = false;
++  std::unique_ptr<network::SimpleURLLoader> loader_;
++  std::unique_ptr<network::SimpleURLLoader> sign_out_loader_;
++  base::WeakPtrFactory<BrowseCraftHandler> weak_factory_{this};
++};
++
++}  // namespace
++
++BrowseCraftUI::BrowseCraftUI(content::WebUI* web_ui)
++    : content::WebUIController(web_ui) {
++  Profile* profile = Profile::FromWebUI(web_ui);
++  content::WebUIDataSource* source =
++      content::WebUIDataSource::CreateAndAdd(profile, kChromeUIBrowseCraftHost);
++  source->SetRequestFilter(base::BindRepeating(&ShouldHandle),
++                           base::BindRepeating(&Handle));
++  web_ui->AddMessageHandler(std::make_unique<BrowseCraftHandler>(profile));
++}
++
++BrowseCraftUI::~BrowseCraftUI() = default;
++
++WEB_UI_CONTROLLER_TYPE_IMPL(BrowseCraftUI)
+diff -ruN a/chrome/browser/ui/webui/browsecraft/browsecraft_ui.h b/chrome/browser/ui/webui/browsecraft/browsecraft_ui.h
+--- a/chrome/browser/ui/webui/browsecraft/browsecraft_ui.h	1970-01-01 00:00:00.000000000 +0000
++++ b/chrome/browser/ui/webui/browsecraft/browsecraft_ui.h	2026-10-09 19:00:23.501543538 +0000
+@@ -0,0 +1,33 @@
++// Copyright 2026 The BrowseCraft Authors
++// Use of this source code is governed by a BSD-style license that can be
++// found in the LICENSE file.
++
++#ifndef CHROME_BROWSER_UI_WEBUI_BROWSECRAFT_BROWSECRAFT_UI_H_
++#define CHROME_BROWSER_UI_WEBUI_BROWSECRAFT_BROWSECRAFT_UI_H_
++
++#include "content/public/browser/web_ui_controller.h"
++#include "content/public/browser/webui_config.h"
++#include "content/public/common/url_constants.h"
++
++class BrowseCraftUI;
++
++inline constexpr char kChromeUIBrowseCraftHost[] = "browsecraft";
++
++class BrowseCraftUIConfig : public content::DefaultWebUIConfig<BrowseCraftUI> {
++ public:
++  BrowseCraftUIConfig()
++      : DefaultWebUIConfig(content::kChromeUIScheme, kChromeUIBrowseCraftHost) {}
++};
++
++// chrome://browsecraft: signing in to your own BrowseCraft sync server.
++class BrowseCraftUI : public content::WebUIController {
++ public:
++  explicit BrowseCraftUI(content::WebUI* web_ui);
++  BrowseCraftUI(const BrowseCraftUI&) = delete;
++  BrowseCraftUI& operator=(const BrowseCraftUI&) = delete;
++  ~BrowseCraftUI() override;
++
++  WEB_UI_CONTROLLER_TYPE_DECL();
++};
++
++#endif  // CHROME_BROWSER_UI_WEBUI_BROWSECRAFT_BROWSECRAFT_UI_H_
+diff -ruN a/chrome/browser/ui/webui/chrome_web_ui_configs.cc b/chrome/browser/ui/webui/chrome_web_ui_configs.cc
+--- a/chrome/browser/ui/webui/chrome_web_ui_configs.cc	2026-10-09 19:00:23.508374892 +0000
++++ b/chrome/browser/ui/webui/chrome_web_ui_configs.cc	2026-10-09 19:00:23.508867049 +0000
+@@ -96,6 +96,7 @@
+ #include "chrome/browser/ui/webui/app_service_internals/app_service_internals_ui.h"
+ #include "chrome/browser/ui/webui/autofill_ml_internals/autofill_ml_internals_ui.h"
+ #include "chrome/browser/ui/webui/bookmarks/bookmarks_ui.h"
++#include "chrome/browser/ui/webui/browsecraft/browsecraft_ui.h"
+ #include "chrome/browser/ui/webui/color_pipeline_internals/color_pipeline_internals_ui.h"
+ #include "chrome/browser/ui/webui/commerce/shopping_insights_side_panel_ui.h"
+ #include "chrome/browser/ui/webui/critical_actions/critical_actions_ui.h"
+@@ -264,6 +265,7 @@
+ #endif  // BUILDFLAG(IS_CHROMEOS)
+ 
+   auto& map = content::WebUIConfigMap::GetInstance();
++  map.AddWebUIConfig(std::make_unique<BrowseCraftUIConfig>());
+   map.AddWebUIConfig(std::make_unique<AccessibilityUIConfig>());
+   map.AddWebUIConfig(std::make_unique<AutofillInternalsUIConfig>());
+   map.AddWebUIConfig(std::make_unique<BluetoothInternalsUIConfig>());
+diff -ruN a/components/sync/base/pref_names.h b/components/sync/base/pref_names.h
+--- a/components/sync/base/pref_names.h	2026-10-09 19:00:23.501770531 +0000
++++ b/components/sync/base/pref_names.h	2026-10-09 19:00:23.502183640 +0000
+@@ -13,6 +13,12 @@
+ inline constexpr char kEnableLocalSyncBackend[] =
+     "sync.enable_local_sync_backend";
+ 
++// BrowseCraft: the sync server the user signed in to (with local sync on, sync
++// goes there instead of to the on-disk loopback server), and the token it gave.
++inline constexpr char kBrowseCraftSyncServer[] = "browsecraft.sync.server";
++inline constexpr char kBrowseCraftSyncToken[] = "browsecraft.sync.token";
++inline constexpr char kBrowseCraftSyncUser[] = "browsecraft.sync.user";
++
+ // Specifies the local sync backend directory. The name is chosen to mimic
+ // user-data-dir etc. This flag only matters if the enable-local-sync-backend
+ // flag is present.
+diff -ruN a/components/sync/engine/sync_engine.h b/components/sync/engine/sync_engine.h
+--- a/components/sync/engine/sync_engine.h	2026-10-09 19:00:23.504216685 +0000
++++ b/components/sync/engine/sync_engine.h	2026-10-09 19:00:23.504557460 +0000
+@@ -64,6 +64,9 @@
+     std::unique_ptr<SyncManagerFactory> sync_manager_factory;
+     bool enable_local_sync_backend = false;
+     base::FilePath local_sync_backend_folder;
++    // BrowseCraft: with local sync on, a token for the user's own server
++    // (`service_url`), which is then used instead of the loopback server.
++    std::string remote_access_token;
+     std::unique_ptr<EngineComponentsFactory> engine_components_factory;
+     scoped_refptr<os_crypt_async::Encryptor> encryptor;
+   };
+diff -ruN a/components/sync/engine/sync_manager.h b/components/sync/engine/sync_manager.h
+--- a/components/sync/engine/sync_manager.h	2026-10-09 19:00:23.504923701 +0000
++++ b/components/sync/engine/sync_manager.h	2026-10-09 19:00:23.505300404 +0000
+@@ -83,6 +83,10 @@
+     bool enable_local_sync_backend = false;
+     base::FilePath local_sync_backend_folder;
+ 
++    // BrowseCraft: with local sync on, the token for the user's own server at
++    // `service_url`, used instead of the loopback server.
++    std::string remote_access_token;
++
+     // Used to communicate with the sync server.
+     std::unique_ptr<HttpPostProviderFactory> post_factory;
+ 
+diff -ruN a/components/sync/engine/sync_manager_impl.cc b/components/sync/engine/sync_manager_impl.cc
+--- a/components/sync/engine/sync_manager_impl.cc	2026-10-09 19:00:23.506871661 +0000
++++ b/components/sync/engine/sync_manager_impl.cc	2026-10-09 19:00:23.507204522 +0000
+@@ -163,7 +163,17 @@
+   sync_status_tracker_->SetHasKeystoreKey(
+       !sync_encryption_handler_->GetKeystoreKeysHandler()->NeedKeystoreKey());
+ 
+-  if (args->enable_local_sync_backend) {
++  if (args->enable_local_sync_backend && !args->remote_access_token.empty()) {
++    // BrowseCraft: no Google account; the user's own server, with the token
++    // it gave at sign-in.
++    VLOG(1) << "Running against the BrowseCraft server " << args->service_url;
++    connection_manager_ = std::make_unique<SyncServerConnectionManager>(
++        MakeConnectionURL(args->service_url, args->cache_guid),
++        std::move(args->post_factory), args->cancelation_signal);
++    signin::AccessTokenInfo token;
++    token.token = args->remote_access_token;
++    connection_manager_->SetAccessTokenInfo(token);
++  } else if (args->enable_local_sync_backend) {
+     VLOG(1) << "Running against local sync backend.";
+     sync_status_tracker_->SetLocalBackendFolder(
+         args->local_sync_backend_folder.AsUTF8Unsafe());
+diff -ruN a/components/sync/service/glue/sync_engine_backend.cc b/components/sync/service/glue/sync_engine_backend.cc
+--- a/components/sync/service/glue/sync_engine_backend.cc	2026-10-09 19:00:23.505789102 +0000
++++ b/components/sync/service/glue/sync_engine_backend.cc	2026-10-09 19:00:23.506476180 +0000
+@@ -311,6 +311,7 @@
+   args.service_url = params.service_url;
+   args.enable_local_sync_backend = params.enable_local_sync_backend;
+   args.local_sync_backend_folder = params.local_sync_backend_folder;
++  args.remote_access_token = params.remote_access_token;
+   args.post_factory = std::move(params.http_factory_getter).Run();
+   args.encryption_observer_proxy = std::move(params.encryption_observer_proxy);
+   args.extensions_activity = params.extensions_activity.get();
+diff -ruN a/components/sync/service/sync_prefs.cc b/components/sync/service/sync_prefs.cc
+--- a/components/sync/service/sync_prefs.cc	2026-10-09 19:00:23.502576191 +0000
++++ b/components/sync/service/sync_prefs.cc	2026-10-09 19:00:23.503114420 +0000
+@@ -192,6 +192,9 @@
+   registry->RegisterIntegerPref(
+       prefs::internal::kSyncPassphrasePromptMutedProductVersion, 0);
+   registry->RegisterBooleanPref(prefs::kEnableLocalSyncBackend, false);
++  registry->RegisterStringPref(prefs::kBrowseCraftSyncServer, std::string());
++  registry->RegisterStringPref(prefs::kBrowseCraftSyncToken, std::string());
++  registry->RegisterStringPref(prefs::kBrowseCraftSyncUser, std::string());
+   registry->RegisterFilePathPref(prefs::kLocalSyncBackendDir, base::FilePath());
+ #if BUILDFLAG(ENABLE_DICE_SUPPORT)
+   registry->RegisterBooleanPref(kAutofillPerAccountPrefMigrationDone, false);
+@@ -775,6 +778,14 @@
+   return local_sync_enabled_;
+ }
+ 
++std::string SyncPrefs::GetBrowseCraftSyncServer() const {
++  return pref_service_->GetString(prefs::kBrowseCraftSyncServer);
++}
++
++std::string SyncPrefs::GetBrowseCraftSyncToken() const {
++  return pref_service_->GetString(prefs::kBrowseCraftSyncToken);
++}
++
+ int SyncPrefs::GetPassphrasePromptMutedProductVersion() const {
+   return pref_service_->GetInteger(
+       prefs::internal::kSyncPassphrasePromptMutedProductVersion);
+diff -ruN a/components/sync/service/sync_prefs.h b/components/sync/service/sync_prefs.h
+--- a/components/sync/service/sync_prefs.h	2026-10-09 19:00:23.503447211 +0000
++++ b/components/sync/service/sync_prefs.h	2026-10-09 19:00:23.503774022 +0000
+@@ -194,6 +194,11 @@
+   // Gets the local sync backend enabled state.
+   bool IsLocalSyncEnabled() const;
+ 
++  // BrowseCraft: the user's own sync server and sign-in token (empty when not
++  // signed in). Used only with local sync on.
++  std::string GetBrowseCraftSyncServer() const;
++  std::string GetBrowseCraftSyncToken() const;
++
+   // The user's passphrase type, determined the first time the engine is
+   // successfully initialized.
+   std::optional<PassphraseType> GetCachedPassphraseType() const;
+diff -ruN a/components/sync/service/sync_service_impl.cc b/components/sync/service/sync_service_impl.cc
+--- a/components/sync/service/sync_service_impl.cc	2026-10-09 19:00:23.509132614 +0000
++++ b/components/sync/service/sync_service_impl.cc	2026-10-09 19:00:23.509798446 +0000
+@@ -649,6 +649,13 @@
+     params.enable_local_sync_backend = true;
+     params.local_sync_backend_folder =
+         sync_client_->GetLocalSyncBackendFolder();
++    // BrowseCraft: signed in to the user's own sync server.
++    const GURL browsecraft_server(sync_prefs_.GetBrowseCraftSyncServer());
++    const std::string browsecraft_token = sync_prefs_.GetBrowseCraftSyncToken();
++    if (browsecraft_server.is_valid() && !browsecraft_token.empty()) {
++      params.service_url = browsecraft_server;
++      params.remote_access_token = browsecraft_token;
++    }
+   }
+   params.engine_components_factory =
+       std::make_unique<EngineComponentsFactoryImpl>(

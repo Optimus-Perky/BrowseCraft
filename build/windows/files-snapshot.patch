@@ -1,0 +1,14 @@
+--- a/chrome/tools/build/win/FILES.cfg
++++ b/chrome/tools/build/win/FILES.cfg
+@@ -112,6 +112,11 @@
+     'optional': ['official'],
+   },
+   {
++    'filename': 'snapshot_blob.bin',
++    'buildtype': ['official'],
++    'optional': ['official'],
++  },
++  {
+     'filename': 'v8_context_snapshot.bin',
+     'buildtype': ['official'],
+     'optional': ['official'],
