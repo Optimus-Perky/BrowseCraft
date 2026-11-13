@@ -1,0 +1,11 @@
+{
+ "version": "0.8.261021.1",
+ "date": "2026-10-21",
+ "chromium": "155.0.8059.39",
+ "chromium_from": "155.0.8059.39",
+ "new": [],
+ "fixed": [
+  "Security: certificates from eMudhra's compromised intermediate certificate authorities are refused. BrowseCraft does not get Google's certificate revocation updates, so these are blocked in the browser itself."
+ ],
+ "security": null
+}

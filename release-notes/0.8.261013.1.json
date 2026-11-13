@@ -1,0 +1,1521 @@
+{
+ "version": "0.8.261013.1",
+ "date": "2026-10-13",
+ "chromium": "155.0.8059.39",
+ "new": [
+  "The first numbered BrowseCraft release: Chromium without Google, signing in to your own BrowseCraft server instead of a Google or Microsoft account.",
+  "Sync to your own server: bookmarks, passwords, history, open tabs, extensions and settings.",
+  "Sign in with your Windows account on a domain PC, or with a user name and password.",
+  "Your profile takes its name from the directory, and your profile photo follows you to every PC.",
+  "Install extensions from the Chrome Web Store.",
+  "An organisation extension store on your server, set by Group Policy: approve extensions once, offer or install them per user, group or PC, and search the Web Store from it.",
+  "Bookmarks: right-click a folder to sort it by name, with its subfolders.",
+  "A Windows installer, registered as a browser; Widevine (Netflix, Spotify) copied from the PC's own Edge.",
+  "BrowseCraft keeps its own profile folder, so it never mixes with another Chromium on the same PC.",
+  "Settings > About shows BrowseCraft's own version as well as Chromium's."
+ ],
+ "fixed": [
+  "Dropping a bookmark folder into itself no longer hangs or crashes the bookmark manager.",
+  "Extensions work on every other site of a server that also runs the extension store."
+ ],
+ "security": {
+  "source": "chrome-releases",
+  "fixes": 247,
+  "highest": "critical",
+  "in_the_wild": false,
+  "scope": "exact",
+  "releases": [
+   {
+    "chromium": "155.0.8059.39",
+    "date": "2026-10-06",
+    "notes": "https://chromereleases.googleblog.com/2026/10/stable-channel-update-for-desktop_086471744.html",
+    "fixes": 247,
+    "items": [
+     {
+      "cve": "CVE-2026-106382",
+      "severity": "critical",
+      "title": "Use after free in Chromecast",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106197",
+      "severity": "critical",
+      "title": "Use after free in Browser",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106358",
+      "severity": "critical",
+      "title": "Use after free in Navigation",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106347",
+      "severity": "critical",
+      "title": "Use after free in Track",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-102322",
+      "severity": "high",
+      "title": "Incorrect Authorization in SiteIsolation",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106245",
+      "severity": "high",
+      "title": "Uninitialized resource in ANGLE",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106327",
+      "severity": "high",
+      "title": "Incorrect authorization in Core",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106366",
+      "severity": "high",
+      "title": "Incomplete cleanup in CustomTabs",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106258",
+      "severity": "high",
+      "title": "Uninitialized resource in ANGLE",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106376",
+      "severity": "high",
+      "title": "Uninitialized resource in ANGLE",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106308",
+      "severity": "high",
+      "title": "Incorrect reference resolution in Autofill",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106215",
+      "severity": "high",
+      "title": "Uninitialized resource in ANGLE",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106369",
+      "severity": "high",
+      "title": "Missing authorization in Translate",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106293",
+      "severity": "high",
+      "title": "Type confusion in ANGLE",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106377",
+      "severity": "high",
+      "title": "Race condition in Fonts",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106412",
+      "severity": "high",
+      "title": "Race condition in Core",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106243",
+      "severity": "high",
+      "title": "Incomplete cleanup in Proxy Auth",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106214",
+      "severity": "high",
+      "title": "Information leak in Proxy",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106364",
+      "severity": "high",
+      "title": "Incorrect authorization in Omnibox",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106239",
+      "severity": "high",
+      "title": "Integer overflow in WebGL",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106426",
+      "severity": "high",
+      "title": "Race condition in Fonts",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106419",
+      "severity": "high",
+      "title": "Use after free in ANGLE",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106396",
+      "severity": "high",
+      "title": "Improper input validation in Omnibox",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106323",
+      "severity": "high",
+      "title": "Missing authorization in Chrome for iOS",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106231",
+      "severity": "high",
+      "title": "Uninitialized resource in Dawn",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106202",
+      "severity": "high",
+      "title": "Uninitialized resource in ANGLE",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106273",
+      "severity": "high",
+      "title": "Uninitialized resource in Video",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106203",
+      "severity": "high",
+      "title": "Incomplete cleanup in Autofill",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106332",
+      "severity": "high",
+      "title": "Integer overflow in Compositing",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106281",
+      "severity": "high",
+      "title": "Use after free in Tint",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106298",
+      "severity": "high",
+      "title": "Use after free in Chrome Tabs",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106193",
+      "severity": "high",
+      "title": "Use after free in Parser",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106255",
+      "severity": "high",
+      "title": "Race condition in V8",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106393",
+      "severity": "high",
+      "title": "Use after free in Storage",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106227",
+      "severity": "high",
+      "title": "Use after free in Core",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106379",
+      "severity": "high",
+      "title": "Uninitialized resource in Skia",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106211",
+      "severity": "high",
+      "title": "Use after free in TabStrip",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106329",
+      "severity": "high",
+      "title": "Incorrect authorization in FileSystem",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106248",
+      "severity": "high",
+      "title": "Use after free in Bindings",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106235",
+      "severity": "high",
+      "title": "Use after free in WebAudio",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106257",
+      "severity": "high",
+      "title": "Use after free in HTML",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106268",
+      "severity": "high",
+      "title": "Use after free in WebRTC",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106278",
+      "severity": "high",
+      "title": "Use after free in Select",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106233",
+      "severity": "high",
+      "title": "Use after free in Metrics",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106318",
+      "severity": "high",
+      "title": "Use after free in Media",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106411",
+      "severity": "high",
+      "title": "Use after free in Parser",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106423",
+      "severity": "high",
+      "title": "Use after free in Media",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106346",
+      "severity": "high",
+      "title": "Improper state validation in DevTools",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106190",
+      "severity": "high",
+      "title": "Use after free in Media",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106357",
+      "severity": "high",
+      "title": "Use after free in WebRTC",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106240",
+      "severity": "high",
+      "title": "Type confusion in V8",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106184",
+      "severity": "high",
+      "title": "Uninitialized resource in Media",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106383",
+      "severity": "high",
+      "title": "Use after free in Media",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106349",
+      "severity": "high",
+      "title": "Use after free in V8",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106421",
+      "severity": "high",
+      "title": "Use after free in PDF",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106204",
+      "severity": "high",
+      "title": "Use after free in PDF",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106200",
+      "severity": "high",
+      "title": "Use after free in Track",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106265",
+      "severity": "medium",
+      "title": "UI misrepresentation in File",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106238",
+      "severity": "medium",
+      "title": "Race condition in Fonts",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106324",
+      "severity": "medium",
+      "title": "Incorrect authorization in WebAppInstalls",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106420",
+      "severity": "medium",
+      "title": "Incorrect calculation in API",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106222",
+      "severity": "medium",
+      "title": "Incorrect authorization in Sync",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106208",
+      "severity": "medium",
+      "title": "Missing authorization in API",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106286",
+      "severity": "medium",
+      "title": "Confused deputy in Omnibox",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106181",
+      "severity": "medium",
+      "title": "Incorrect reference resolution in DevTools",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106315",
+      "severity": "medium",
+      "title": "Use after free in Modularization",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106274",
+      "severity": "medium",
+      "title": "Incorrect reference resolution in Browser",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106365",
+      "severity": "medium",
+      "title": "Missing authorization in Animation",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106267",
+      "severity": "medium",
+      "title": "Missing authorization in Network",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106194",
+      "severity": "medium",
+      "title": "Missing authorization in WebAppInstalls",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106313",
+      "severity": "medium",
+      "title": "Incorrect authorization in Browser",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106283",
+      "severity": "medium",
+      "title": "Use after free in Streaming",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106291",
+      "severity": "medium",
+      "title": "Use after free in GarbageCollection",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106300",
+      "severity": "medium",
+      "title": "Race condition in CacheStorage",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106314",
+      "severity": "medium",
+      "title": "Incorrect authorization in Bluetooth",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106223",
+      "severity": "medium",
+      "title": "Uninitialized resource in GPU",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106242",
+      "severity": "medium",
+      "title": "Information leak in Omnibox",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106241",
+      "severity": "medium",
+      "title": "Incorrect authorization in Search",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106381",
+      "severity": "medium",
+      "title": "Incorrect authorization in Passwords",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106217",
+      "severity": "medium",
+      "title": "Missing authorization in Google Lens",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106425",
+      "severity": "medium",
+      "title": "Missing authorization in BrowserTag",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106225",
+      "severity": "medium",
+      "title": "Missing authorization in Autofill",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106363",
+      "severity": "medium",
+      "title": "Missing authorization in FullScreen",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106266",
+      "severity": "medium",
+      "title": "Confused deputy in Contextual Tasks",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106189",
+      "severity": "medium",
+      "title": "Code injection in ReaderMode",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106335",
+      "severity": "medium",
+      "title": "Use after free in Media",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106415",
+      "severity": "medium",
+      "title": "Information leak in Enterprise",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106224",
+      "severity": "medium",
+      "title": "Missing authorization in Google Lens",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106185",
+      "severity": "medium",
+      "title": "Improper input validation in Viz",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106244",
+      "severity": "medium",
+      "title": "Incorrect authorization in Permissions",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106407",
+      "severity": "medium",
+      "title": "Incorrect authorization in GetUserMedia",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106389",
+      "severity": "medium",
+      "title": "Incorrect authorization in USB",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106397",
+      "severity": "medium",
+      "title": "Incorrect authorization in Mobile",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106196",
+      "severity": "medium",
+      "title": "Missing authorization in Navigation",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106414",
+      "severity": "medium",
+      "title": "Improper input validation in Mobile",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106408",
+      "severity": "medium",
+      "title": "Protection mechanism failure in Mobile",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106261",
+      "severity": "medium",
+      "title": "Uninitialized resource in Video",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106406",
+      "severity": "medium",
+      "title": "Missing authorization in Mobile",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106290",
+      "severity": "medium",
+      "title": "Uninitialized resource in GPU",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106378",
+      "severity": "medium",
+      "title": "Privilege elevation in Sandbox",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106198",
+      "severity": "medium",
+      "title": "Missing authorization in FileSystem",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106326",
+      "severity": "medium",
+      "title": "Confused deputy in UI",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106354",
+      "severity": "medium",
+      "title": "Improper resource exposure in Extensions",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106342",
+      "severity": "medium",
+      "title": "Information leak in Autofill",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106424",
+      "severity": "medium",
+      "title": "Information leak in Audio",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106253",
+      "severity": "medium",
+      "title": "Incorrect authorization in Extensions",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106279",
+      "severity": "medium",
+      "title": "Incorrect reference resolution in Passwords",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106361",
+      "severity": "medium",
+      "title": "Incorrect provision of specified functionality in Mobile",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106402",
+      "severity": "medium",
+      "title": "Incorrect authorization in Extensions",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106311",
+      "severity": "medium",
+      "title": "Clickjacking in PermissionElement",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106246",
+      "severity": "medium",
+      "title": "Incorrect authorization in Browser",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106302",
+      "severity": "medium",
+      "title": "UI misrepresentation in PermissionElement",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106416",
+      "severity": "medium",
+      "title": "Code injection in Extensions",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106182",
+      "severity": "medium",
+      "title": "UI misrepresentation in Paint",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106282",
+      "severity": "medium",
+      "title": "UI misrepresentation in WebOTP",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106392",
+      "severity": "medium",
+      "title": "Information leak in WebAudio",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106188",
+      "severity": "medium",
+      "title": "Confused deputy in SignIn",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106370",
+      "severity": "medium",
+      "title": "Uninitialized resource in GPU",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106356",
+      "severity": "medium",
+      "title": "Clickjacking in EVP",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106405",
+      "severity": "medium",
+      "title": "Race condition in CustomTabs",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106322",
+      "severity": "medium",
+      "title": "Open redirect in AppManifest",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106280",
+      "severity": "medium",
+      "title": "Incorrect authorization in PermissionElement",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106206",
+      "severity": "medium",
+      "title": "Improper input validation in Mobile",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106180",
+      "severity": "medium",
+      "title": "Observable discrepancy in Animation",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106303",
+      "severity": "medium",
+      "title": "Observable discrepancy in Autofill AI",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106201",
+      "severity": "medium",
+      "title": "Race condition in V8",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106333",
+      "severity": "medium",
+      "title": "Incorrect authorization in Input",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106228",
+      "severity": "medium",
+      "title": "Confused deputy in Google Lens",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106289",
+      "severity": "medium",
+      "title": "Missing authorization in FedCM",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106277",
+      "severity": "medium",
+      "title": "Information leak in Animation",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106410",
+      "severity": "medium",
+      "title": "Missing authorization in Permissions",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106284",
+      "severity": "medium",
+      "title": "Out of bounds read in Printing",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106209",
+      "severity": "medium",
+      "title": "UI misrepresentation in Mobile",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106216",
+      "severity": "medium",
+      "title": "Cross-site request forgery in ReadingList",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106328",
+      "severity": "medium",
+      "title": "Incorrect authorization in PDF",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106387",
+      "severity": "medium",
+      "title": "Missing authorization in Mobile",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106400",
+      "severity": "medium",
+      "title": "Clickjacking in Messages",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106205",
+      "severity": "medium",
+      "title": "Missing authorization in Passwords",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106213",
+      "severity": "medium",
+      "title": "Race condition in WebAudio",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106230",
+      "severity": "medium",
+      "title": "Incorrect reference resolution in Offline",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106367",
+      "severity": "medium",
+      "title": "Missing authorization in Mobile",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106226",
+      "severity": "medium",
+      "title": "Improper input validation in Compositing",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106229",
+      "severity": "medium",
+      "title": "UI misrepresentation in FileSystem",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106232",
+      "severity": "medium",
+      "title": "UI misrepresentation in Browser",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106391",
+      "severity": "medium",
+      "title": "Incorrect authorization in WebShare",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106336",
+      "severity": "medium",
+      "title": "Observable discrepancy in Paint",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106403",
+      "severity": "medium",
+      "title": "Incorrect authorization in Accessibility",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106373",
+      "severity": "medium",
+      "title": "Use after free in Fonts",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106301",
+      "severity": "medium",
+      "title": "Confused deputy in Contextual Tasks",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106292",
+      "severity": "medium",
+      "title": "Buffer overflow in Fonts",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106262",
+      "severity": "medium",
+      "title": "Incomplete cleanup in GetUserMedia",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106360",
+      "severity": "medium",
+      "title": "Information leak in Payments",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106375",
+      "severity": "medium",
+      "title": "Incomplete cleanup in Dawn",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106348",
+      "severity": "medium",
+      "title": "Information leak in Animation",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106307",
+      "severity": "medium",
+      "title": "Incorrect authorization in Network",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106212",
+      "severity": "medium",
+      "title": "Incorrect authorization in Autofill",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106398",
+      "severity": "medium",
+      "title": "Incorrect authorization in Media",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106388",
+      "severity": "medium",
+      "title": "Missing authorization in DataTransfer",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106271",
+      "severity": "medium",
+      "title": "Missing authorization in Workers",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106395",
+      "severity": "medium",
+      "title": "Uninitialized resource in Dawn",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106304",
+      "severity": "medium",
+      "title": "Out of bounds read in ANGLE",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106401",
+      "severity": "medium",
+      "title": "Out of bounds write in Media",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106330",
+      "severity": "medium",
+      "title": "Information leak in Paint",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106295",
+      "severity": "medium",
+      "title": "Incorrect authorization in Unbounded Element",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106352",
+      "severity": "medium",
+      "title": "Incorrect authorization in WebProtect",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106337",
+      "severity": "medium",
+      "title": "UI misrepresentation in UI",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106263",
+      "severity": "medium",
+      "title": "Improper input validation in SignIn",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106404",
+      "severity": "medium",
+      "title": "Incorrect authorization in FontAccess",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106183",
+      "severity": "medium",
+      "title": "Missing authorization in Chromoting",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106386",
+      "severity": "medium",
+      "title": "Uninitialized resource in WebAudio",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106351",
+      "severity": "medium",
+      "title": "Observable discrepancy in Safebrowsing",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106384",
+      "severity": "medium",
+      "title": "Missing authorization in SiteIsolation",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106207",
+      "severity": "medium",
+      "title": "Race condition in V8",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106321",
+      "severity": "medium",
+      "title": "Information leak in Editing",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106210",
+      "severity": "medium",
+      "title": "Observable discrepancy in Scroll",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106254",
+      "severity": "medium",
+      "title": "Information leak in Mobile",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106372",
+      "severity": "medium",
+      "title": "Incorrect authorization in UI",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106341",
+      "severity": "medium",
+      "title": "Type confusion in V8",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106409",
+      "severity": "medium",
+      "title": "Incorrect reference resolution in WebAppInstalls",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106340",
+      "severity": "low",
+      "title": "Missing authorization in CredentialProvider",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106276",
+      "severity": "low",
+      "title": "UI misrepresentation in Payments",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106338",
+      "severity": "low",
+      "title": "UI misrepresentation in PictureInPicture",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106317",
+      "severity": "low",
+      "title": "UI misrepresentation in FullScreen",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106344",
+      "severity": "low",
+      "title": "Missing authorization in Permissions",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106359",
+      "severity": "low",
+      "title": "Confused deputy in DeviceBoundSessionCredentials",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106353",
+      "severity": "low",
+      "title": "Improper input validation in Mobile",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106312",
+      "severity": "low",
+      "title": "Missing authorization in SignIn",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106191",
+      "severity": "low",
+      "title": "Missing authorization in Actor",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106250",
+      "severity": "low",
+      "title": "Missing authorization in Actor",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106309",
+      "severity": "low",
+      "title": "Incorrect authorization in Selection",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106187",
+      "severity": "low",
+      "title": "Missing authorization in Permissions",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106394",
+      "severity": "low",
+      "title": "Incomplete cleanup in Glic",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106306",
+      "severity": "low",
+      "title": "Incorrect authorization in DevTools",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106427",
+      "severity": "low",
+      "title": "Confused deputy in Mobile",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106252",
+      "severity": "low",
+      "title": "Incorrect comparison in Fonts",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106287",
+      "severity": "low",
+      "title": "Information loss in CORS",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106297",
+      "severity": "low",
+      "title": "Incorrect authorization in Scheduling",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106260",
+      "severity": "low",
+      "title": "Incorrect authorization in DevTools",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106362",
+      "severity": "low",
+      "title": "Missing authorization in DevTools",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106275",
+      "severity": "low",
+      "title": "Uninitialized resource in GPU",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106199",
+      "severity": "low",
+      "title": "Incorrect authorization in Actor",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106299",
+      "severity": "low",
+      "title": "Improper input validation in WebAudio",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106422",
+      "severity": "low",
+      "title": "Incorrect authorization in API",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106186",
+      "severity": "low",
+      "title": "Uncontrolled search path element in CredentialProvider",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106247",
+      "severity": "low",
+      "title": "Buffer overflow in ANGLE",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106192",
+      "severity": "low",
+      "title": "Information leak in Mobile",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106399",
+      "severity": "low",
+      "title": "Out of bounds read in Skia",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106264",
+      "severity": "low",
+      "title": "Missing authorization in Web Authentication (Passkeys & Security Keys)",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106285",
+      "severity": "low",
+      "title": "UI misrepresentation in WebAppInstalls",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106220",
+      "severity": "low",
+      "title": "Information leak in Passwords",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106417",
+      "severity": "low",
+      "title": "Integer overflow in Media",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106221",
+      "severity": "low",
+      "title": "Confused deputy in WebAPKs",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106259",
+      "severity": "low",
+      "title": "Incorrect authorization in PermissionElement",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106296",
+      "severity": "low",
+      "title": "Improper privilege management in UI",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106249",
+      "severity": "low",
+      "title": "Incorrect authorization in Autofill",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106374",
+      "severity": "low",
+      "title": "Type confusion in V8",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106380",
+      "severity": "low",
+      "title": "UI misrepresentation in UI",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106179",
+      "severity": "low",
+      "title": "UI misrepresentation in WebAppInstalls",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106368",
+      "severity": "low",
+      "title": "UI misrepresentation in UI",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106237",
+      "severity": "low",
+      "title": "Information leak in Permissions",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106331",
+      "severity": "low",
+      "title": "Improper input validation in Extensions",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106270",
+      "severity": "low",
+      "title": "Incorrect authorization in WebAppInstalls",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106350",
+      "severity": "low",
+      "title": "Incorrect authorization in Browser",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106288",
+      "severity": "low",
+      "title": "Missing authorization in Browser",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106305",
+      "severity": "low",
+      "title": "UI misrepresentation in Mobile",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106418",
+      "severity": "low",
+      "title": "Missing authorization in Network",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106343",
+      "severity": "low",
+      "title": "Improper state validation in Autofill AI",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106371",
+      "severity": "low",
+      "title": "Incorrect authorization in Transactions Platform",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106256",
+      "severity": "low",
+      "title": "Information leak in Passwords",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106413",
+      "severity": "low",
+      "title": "Race condition in Browser",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106339",
+      "severity": "low",
+      "title": "Use of released resource in Core",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106320",
+      "severity": "low",
+      "title": "Use of released resource in UI",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106195",
+      "severity": "low",
+      "title": "Incorrect authorization in Chromoting",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106316",
+      "severity": "low",
+      "title": "UI misrepresentation in Chromoting",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106385",
+      "severity": "low",
+      "title": "Race condition in Chromoting",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106325",
+      "severity": "low",
+      "title": "Incorrect reference resolution in Core",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106390",
+      "severity": "low",
+      "title": "Incorrect provision of specified functionality in SanitizerAPI",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106294",
+      "severity": "low",
+      "title": "Incomplete cleanup in Chromoting",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106334",
+      "severity": "low",
+      "title": "Information leak in Payments",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106236",
+      "severity": "low",
+      "title": "UI misrepresentation in Chromoting",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106251",
+      "severity": "low",
+      "title": "UI misrepresentation in Chromoting",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106310",
+      "severity": "low",
+      "title": "Use of released resource in FontAccess",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106345",
+      "severity": "low",
+      "title": "Use of released resource in Session",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106272",
+      "severity": "low",
+      "title": "UI misrepresentation in Chromoting",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106355",
+      "severity": "low",
+      "title": "Missing authorization in Media",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106234",
+      "severity": "low",
+      "title": "Use after free in Network",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-106269",
+      "severity": "low",
+      "title": "Use after free in CSS",
+      "in_the_wild": false
+     }
+    ]
+   }
+  ],
+  "checked": "2026-11-13"
+ }
+}

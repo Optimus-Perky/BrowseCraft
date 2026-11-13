@@ -4,7 +4,7 @@
 #
 #   packaging/windows/build-installer.sh <browsecraft-<chromium>-v<browsecraft>-windows-x64.zip> [out dir]
 #
-# The file is BrowseCraft-v<browsecraft>.exe, e.g. BrowseCraft-v0.8.261013.1.exe: the version
+# The file is BrowseCraft-v<browsecraft>.exe, e.g. BrowseCraft-v1.0.261120.exe: the version
 # build/version.py stamped into that build (Settings > About shows it), read from the zip's name
 # and added to build/builds.log. Windows Installer cannot hold a date in a version, so the
 # installer's own version is Chromium's three numbers and BrowseCraft's build (this repo's commit count),
@@ -19,7 +19,8 @@ ZIP=${1:?usage: build-installer.sh <windows build zip> [out dir]}
 OUT=${2:-dist}
 CHROMIUM=$(basename "$ZIP" | sed -n 's/^browsecraft-\([0-9]*\.[0-9]*\.[0-9]*\)\..*/\1/p')
 [ -n "$CHROMIUM" ] || { echo "cannot read the Chromium version from $ZIP" >&2; exit 1; }
-BCVER=$(basename "$ZIP" | sed -n 's/.*-v\([0-9]*\.[0-9]*\.[0-9]\{6\}\.[0-9]*\)-.*/\1/p')
+BCVER=$(basename "$ZIP" | sed -n 's/.*-v\([0-9]*\.[0-9]*\.[0-9]\{6\}\(\.[0-9]*\|[a-z]\)\{0,1\}\)-.*/\1/p')   # 0.8.261013.1, 1.0.261120, 1.0.261120a
+CHROMIUM_FULL=$(basename "$ZIP" | sed -n 's/^browsecraft-\([0-9.]*[0-9]\)-v.*/\1/p')
 [ -n "$BCVER" ] || { echo "no BrowseCraft version (-v<version>-) in $ZIP: stamp the build with build/version.py" >&2; exit 1; }
 EXE="BrowseCraft-v$BCVER.exe"
 VERSION="$CHROMIUM.$(git rev-list --count HEAD)"
@@ -37,5 +38,5 @@ mkdir -p "$OUT"
 $SCP "$WIX_USER@$WIX_HOST:C:/bcbuild/BrowseCraft.exe" "$OUT/$EXE"
 ( cd "$OUT" && sha256sum "$EXE" | tee "$EXE.sha256" )
 echo "$VERSION" > "$OUT/$EXE.version"   # the bundle's version (what Windows lists as installed)
-python3 build/version.py record "$BCVER"
+python3 build/version.py record "$BCVER" "$CHROMIUM_FULL"
 $SSH "powershell -NoProfile -Command \"Remove-Item C:\bcbuild -Recurse -Force -EA 0\"" >/dev/null

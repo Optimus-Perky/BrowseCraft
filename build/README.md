@@ -70,9 +70,47 @@ login. The address is only matched by the browser, never contacted.
 
 ## Version
 
-BrowseCraft's own version is `v<release>.<yymmdd>.<build of the day>`, e.g. v0.8.261013.1
-(release in `VERSION`). Before each build: `build/version.py next` gives the version, then
+From Chromium 158, BrowseCraft's own version is `v<major>.<minor>.<yymmdd>[letter]` (13 Nov
+2026): the major goes up one with each Chromium major (158 is v1, 159 v2), the minor is 0 for a
+major's first build and goes up one with each Chromium point release in it, yymmdd is the day that
+version was first built, and a build of ours on a Chromium already built (a fix, no new Chromium)
+keeps the number and adds a letter: v1.0.261120, v1.0.261120a, v1.0.261120b, then v1.1.261201 for
+the next point release. Up to 157 it was `v<release>.<yymmdd>.<build of the day>`, e.g.
+v0.8.261013.1 (release in `VERSION`). `build/builds.log` records each version with its Chromium,
+which is how the next one is worked out; `build/tests/test_version.py` tests the rules.
+Before each build: `build/version.py next <chromium>` gives the version, then
 `build/version.py stamp <src> <version>` puts it in the tree (Settings > About shows
 "Version v0.8.261013.1 (Chromium 155.0.8059.39)"). Name the Windows zip
 `browsecraft-<chromium>-v<version>-windows-x64.zip`; `packaging/windows/build-installer.sh`
 reads the version from it, makes `BrowseCraft-v<version>.exe` and records it in `build/builds.log`.
+
+## Update check, update tab, What's new, change history (from v0.8.261113.2)
+
+`build/updatecheck.py` (after identity.py; new files in `build/updatecheck/`):
+
+- **Check**: about 30 s after start-up, then every 24 h, a plain GET of
+  `https://altcraft.perkin.me.uk/browsecraft/latest.json` (no cookies, no identifiers; 64 KB at
+  most). A file that does not check out (`browsecraft_update_logic.cc`: schema, product, version,
+  https or same-origin URLs, value ranges, printable text) is ignored and never shown.
+- **Shown**: a newer, not skipped version is an item in the app menu and a line on Settings >
+  About. A *security* update also opens chrome://browsecraft/update: at the check that follows a
+  browser start, at most once a day, never mid-session. "Skip this version" (Local State
+  `browsecraft.update.skipped_version`) silences that version; a newer one shows again. Nothing is
+  ever downloaded or installed.
+- **Off**: chrome://browsecraft "Check for a new BrowseCraft once a day"; policy
+  `UpdateCheckEnabled` = 0; `--disable-browsecraft-update-check`. Elsewhere: policy
+  `UpdateCheckUrl`, `--browsecraft-update-url`. Tests: `--browsecraft-update-check-delay`,
+  `--browsecraft-update-check-interval`, `--browsecraft-update-today`.
+- **What's new**: at the first start after the version changes, chrome://browsecraft/whatsnew
+  shows the release notes since the last version run (with none recorded: the releases of the
+  running Chromium major). Never on a new profile or a downgrade. Off on chrome://browsecraft.
+- **Room for automatic installs**: the checker only finds versions and tells observers
+  (`browsecraft::update::Observer`); latest.json carries each platform's installer URL and sha256.
+- Unit tests: `ninja -C out/Default browsecraft_update_unittests` (Linux tree), plain gtest.
+
+**Release notes** (`release-notes/<version>.json`, `build/release_notes.py`): what is new and
+fixed, written for users, plus the Chromium security fixes from Google's Chrome Releases notes
+(`build/chrome_releases.py`, filled once with `release_notes.py security <version>`). One
+renderer for both places: `version.py stamp` bundles the entries into the build
+(`browsecraft_release_notes.h`) and the site's change history is built from the same entries when
+a release is published. Tests: `python3 build/tests/test_release_notes.py`.

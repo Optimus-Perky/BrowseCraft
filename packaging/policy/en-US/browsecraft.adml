@@ -1,12 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <policyDefinitionResources xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                           revision="1.1" schemaVersion="1.0" xmlns="http://schemas.microsoft.com/GroupPolicy/2006/07/PolicyDefinitions">
+                           revision="1.2" schemaVersion="1.0" xmlns="http://schemas.microsoft.com/GroupPolicy/2006/07/PolicyDefinitions">
   <displayName>BrowseCraft</displayName>
   <description>BrowseCraft's own settings.</description>
   <resources>
     <stringTable>
       <string id="BrowseCraft">BrowseCraft</string>
       <string id="SUPPORTED_BrowseCraft155">BrowseCraft 155 and later</string>
+      <string id="SUPPORTED_BrowseCraftUpdateCheck">BrowseCraft v0.8.261113.2 and later</string>
+      <string id="UpdateCheckEnabled">Check for BrowseCraft updates</string>
+      <string id="UpdateCheckEnabled_Explain">BrowseCraft checks once a day (and shortly after it starts) for a newer version: a plain request for a small public file, with no cookies and nothing about the user or the PC. A security update opens a tab once a day at start-up; other updates show in the menu and on the About page. BrowseCraft never downloads or installs anything by itself.
+
+Disabled: no checks, nothing shown, and users cannot turn it on (for PCs where IT installs updates). Enabled or not configured: users can turn it off on chrome://browsecraft.
+
+The computer setting wins over the user setting. BrowseCraft reads it when it starts.</string>
+      <string id="UpdateCheckUrl">Where to check for BrowseCraft updates</string>
+      <string id="UpdateCheckUrl_Explain">The address of the latest.json file the update check reads, for an organisation that publishes its own (tested) BrowseCraft builds, for example https://intranet.example.org/browsecraft/latest.json. The download page and installers it names must be on https or on the same server.
+
+Not configured: BrowseCraft's own download site. The computer setting wins over the user setting.</string>
       <string id="SyncServerUrl">Sync server (sign in with the Windows account)</string>
       <string id="SyncServerUrl_Explain">The address of your organisation's BrowseCraft server, for example http://browsecraft.example.org:8295. Use the server's DNS name (the one in its Kerberos SPN, HTTP/browsecraft.example.org), not an IP address.
 
@@ -35,6 +46,11 @@ Set it for computers (applies to everyone on them) or for users; the computer se
       <presentation id="ExtensionStoreUrl">
         <textBox refId="ExtensionStoreUrl">
           <label>Server address:</label>
+        </textBox>
+      </presentation>
+      <presentation id="UpdateCheckUrl">
+        <textBox refId="UpdateCheckUrl">
+          <label>latest.json address:</label>
         </textBox>
       </presentation>
     </presentationTable>

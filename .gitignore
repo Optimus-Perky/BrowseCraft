@@ -8,3 +8,5 @@ assets/logo-options/round3/*.geojson
 build/branding/out/
 build/branding/work/
 build/branding/resvg
+__pycache__/
+*.pyc

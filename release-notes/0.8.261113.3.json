@@ -1,0 +1,19 @@
+{
+ "version": "0.8.261113.3",
+ "date": "2026-11-13",
+ "chromium": "157.0.8103.50",
+ "chromium_from": "157.0.8103.50",
+ "new": [
+  "BrowseCraft checks once a day whether a newer version is out: a plain request for a small public file, with no cookies and nothing about you or your PC. Turn it off on chrome://browsecraft.",
+  "A security update opens a tab saying how many security fixes it brings, how serious they are and whether any is already being exploited, with a Download button. It opens at most once a day, at start-up, and \"Skip this version\" silences that version.",
+  "Other updates show quietly in the menu and on the About page.",
+  "After an update, a tab shows what is new, what was fixed and the security fixes applied, for every version since the one you had. Turn it off on chrome://browsecraft.",
+  "The full change history is on the BrowseCraft website.",
+  "BrowseCraft for Linux (x86-64) can be downloaded from the website too."
+ ],
+ "fixed": [
+  "The About page credits the Chromium open source project and its authors again (it had been renamed along with the browser).",
+  "chrome://browsecraft is now simply \"BrowseCraft\": it holds sync, updates and What's new."
+ ],
+ "security": null
+}

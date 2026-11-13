@@ -23,6 +23,17 @@ for f in chrome/app/chromium_strings.grd components/components_chromium_strings.
   [ -f "$SRC/$f" ] || continue
   sed -i -E '/(path=|file=|<output|<include|\.xtb|\.pak|\.h")/!s/Chromium/BrowseCraft/g' "$SRC/$f"
 done
+# Put Chromium back where it means the project, not this browser (2026-11-13): the credit on
+# Settings > About and chrome://version, the copyright (BrowseCraft's authors and Chromium's), the
+# debug pages' note, and ChromiumOS (ChromeOS builds only). Done after the rename, so a re-run
+# lands in the same place.
+for f in chrome/app/chromium_strings.grd components/components_chromium_strings.grd $(cd "$SRC" && ls chrome/app/*chromium*.grdp 2>/dev/null); do
+  [ -f "$SRC/$f" ] || continue
+  sed -i -e 's#</ph>BrowseCraft<ph name="END_LINK_CHROMIUM">#</ph>Chromium<ph name="END_LINK_CHROMIUM">#g' \
+         -e 's#The BrowseCraft Authors\. All rights reserved\.#The BrowseCraft Authors and The Chromium Authors. All rights reserved.#g' \
+         -e 's#for use by BrowseCraft developers#for use by Chromium developers#g' \
+         -e 's#BrowseCraftOS#ChromiumOS#g' "$SRC/$f"
+done
 # Settings' "You and Google" section is about the BrowseCraft account here.
 sed -i 's/^      You and Google$/      You and BrowseCraft/' "$SRC/chrome/app/settings_strings.grdp"
 echo "rebranded $SRC"

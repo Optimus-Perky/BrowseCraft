@@ -28,13 +28,14 @@ constexpr char kPage[] = R"(<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>BrowseCraft sync</title>
+<title>BrowseCraft</title>
 <link rel="stylesheet" href="browsecraft.css">
 <script src="browsecraft.js"></script>
 </head>
 <body>
 <main>
-  <h1>BrowseCraft sync</h1>
+  <h1>BrowseCraft</h1>
+  <h2>Sync</h2>
   <p class="lead">Sign in to your BrowseCraft server and your bookmarks,
   passwords, history, open tabs, extensions and settings follow you to every
   PC you sign in on. No Google or Microsoft account involved.</p>
@@ -83,6 +84,7 @@ body { margin: 0; background: var(--bg); color: var(--text);
 main { max-width: 34em; margin: 4em auto; background: var(--card);
   border: 1px solid var(--line); border-radius: 10px; padding: 2em 2.4em; }
 h1 { margin: 0 0 .4em; font-size: 1.6em; }
+h2 { margin: 1.2em 0 .2em; font-size: 1.15em; }
 .lead { color: var(--dim); }
 .who { font-size: 1.2em; margin-bottom: .2em; }
 #who-user { color: var(--dim); font-size: .85em; margin-left: .5em; }

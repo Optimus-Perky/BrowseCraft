@@ -6,6 +6,8 @@ URLBlocklist, still work as in Chromium.)
 | Setting | Windows registry (machine wins over user) | Linux |
 |---|---|---|
 | `ExtensionStoreUrl`: your BrowseCraft server, whose `/webstore` becomes the only extension store | `HKLM` or `HKCU\SOFTWARE\Policies\BrowseCraft`, `ExtensionStoreUrl` (REG_SZ) | any `*.json` in `/etc/browsecraft/policies/managed/` (see `browsecraft-linux-example.json`) |
+| `UpdateCheckEnabled`: 0 turns the daily update check off (and users cannot turn it on) | `UpdateCheckEnabled` (REG_DWORD 0/1) | `"UpdateCheckEnabled": false` |
+| `UpdateCheckUrl`: the latest.json to check instead of BrowseCraft's own (an organisation's tested builds) | `UpdateCheckUrl` (REG_SZ) | `"UpdateCheckUrl": "https://..."` |
 
 **Group Policy:** copy `browsecraft.admx` to `PolicyDefinitions` and `en-US/browsecraft.adml` to
 `PolicyDefinitions\en-US` in the central store

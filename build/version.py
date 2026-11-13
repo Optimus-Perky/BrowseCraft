@@ -1,12 +1,19 @@
 #!/usr/bin/env python3
-"""BrowseCraft's own version: v<release>.<yymmdd>.<build of the day>, e.g. v0.8.261013.1
-(2026-10-13: "a version number under about to signify what build it is", and in the installer's
-file name). The release is in VERSION at the top of the repo; build/builds.log lists every
-version an installer was made from, which is how the next build of the day is counted.
+"""BrowseCraft's own version (2026-10-13: "a version number under about to signify what build it
+is", and in the installer's file name). build/builds.log lists every version an installer was made
+from, with its Chromium, which is how the next one is worked out.
 
-  version.py next                 the version the next build gets (today's date)
-  version.py stamp <src> <ver>    put <ver> in the source tree (Settings > About shows it)
-  version.py record <ver>         add <ver> to builds.log (build-installer.sh does this)
+From Chromium 158 (13 Nov 2026): v<major>.<minor>.<yymmdd>[letter]
+  - major goes up one with each Chromium major: 158 is v1, 159 v2, ...
+  - minor is 0 for a major's first build and goes up one with each Chromium point release in it
+  - yymmdd is the day that version was first built
+  - a build of ours on a Chromium already built (a fix, no new Chromium) keeps the number and adds
+    a letter: v1.0.261120, then v1.0.261120a, v1.0.261120b ...
+Up to Chromium 157: v<release>.<yymmdd>.<build of the day>, e.g. v0.8.261013.1 (release in VERSION).
+
+  version.py next [chromium]           the version the next build gets (no chromium: the old scheme)
+  version.py stamp <src> <ver>         put <ver> in the source tree (Settings > About shows it)
+  version.py record <ver> [chromium]   add <ver> to builds.log (build-installer.sh does this)
 
 The stamp is a one-line header included only by the About page's strings, so a new version
 recompiles one file and relinks; it is rewritten only when it changes. Run stamp in the src tree
@@ -40,23 +47,56 @@ def release():
         return f.read().strip()
 
 
-def recorded():
+FIRST_MAJOR = 158   # Chromium 158 is BrowseCraft v1
+OLD = re.compile(r"\d+\.\d+\.\d{6}\.\d+")          # 0.8.261013.1
+NEW = re.compile(r"(\d+)\.(\d+)\.(\d{6})([a-z]?)")   # 1.0.261120, 1.0.261120a
+
+
+def entries():
+    """(version, chromium or "") for every line of builds.log."""
     if not os.path.exists(LOG):
         return []
+    out = []
     with open(LOG) as f:
-        return [line.split()[0] for line in f if line.strip() and not line.startswith("#")]
+        for line in f:
+            p = line.split()
+            if p and not line.startswith("#"):
+                out.append((p[0], p[3] if len(p) > 3 else ""))
+    return out
 
 
-def next_version():
-    day = datetime.date.today().strftime("%y%m%d")
-    prefix = f"{release()}.{day}."
-    built = [int(v[len(prefix):]) for v in recorded() if v.startswith(prefix)]
-    return f"{prefix}{max(built, default=0) + 1}"
+def recorded():
+    return [v for v, _ in entries()]
+
+
+def next_version(chromium="", today=None):
+    day = (today or datetime.date.today()).strftime("%y%m%d")
+    major = int(chromium.split(".")[0]) if chromium else 0
+    if major < FIRST_MAJOR:
+        prefix = f"{release()}.{day}."
+        built = [int(v[len(prefix):]) for v in recorded() if v.startswith(prefix)]
+        return f"{prefix}{max(built, default=0) + 1}"
+    mine = []   # (minor, yymmdd, letter, chromium) of this major's builds
+    for v, c in entries():
+        m = NEW.fullmatch(v)
+        if m and c and int(c.split(".")[0]) == major and int(m.group(1)) == major - FIRST_MAJOR + 1:
+            mine.append((int(m.group(2)), m.group(3), m.group(4), c))
+    same = [e for e in mine if e[3] == chromium]
+    if same:   # this Chromium again: a fix of ours, the next letter on its number
+        minor, first_day = same[0][0], same[0][1]
+        letters = [e[2] for e in same if e[0] == minor and e[1] == first_day]
+        last = max(letters)
+        if last == "z":
+            sys.exit(f"Chromium {chromium} has been built 27 times: no letter left")
+        nxt = "a" if last == "" else chr(ord(last) + 1)
+        return f"{major - FIRST_MAJOR + 1}.{minor}.{first_day}{nxt}"
+    minor = max((e[0] for e in mine), default=-1) + 1
+    return f"{major - FIRST_MAJOR + 1}.{minor}.{day}"
 
 
 def check(ver):
-    if not re.fullmatch(r"\d+\.\d+\.\d{6}\.\d+", ver):
-        sys.exit(f"not a BrowseCraft version: {ver} (want e.g. 0.8.261013.1, no v)")
+    if not (OLD.fullmatch(ver) or NEW.fullmatch(ver)):
+        sys.exit(f"not a BrowseCraft version: {ver} (want e.g. 1.0.261120, 1.0.261120a or 0.8.261013.1, no v)")
 
 
 def stamp(src, ver):
@@ -84,24 +124,29 @@ def stamp(src, ver):
     if not os.path.exists(hpath) or open(hpath).read() != header:
         with open(hpath, "w") as f:
             f.write(header)
+    # The release notes this build carries (the "What's new" tab), up to this version.
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    import release_notes
+    if os.path.isdir(os.path.join(src, "chrome/browser/browsecraft")):
+        release_notes.bundle(src, ver)
     print(f"stamped v{ver} in {src}")
 
 
-def record(ver):
+def record(ver, chromium=""):
     check(ver)
     if ver in recorded():
         return
     with open(LOG, "a") as f:
-        f.write(f"{ver} {datetime.datetime.now():%Y-%m-%d %H:%M}\n")
+        f.write(f"{ver} {datetime.datetime.now():%Y-%m-%d %H:%M}{' ' + chromium if chromium else ''}\n")
 
 
 if __name__ == "__main__":
     a = sys.argv[1:]
-    if a == ["next"]:
-        print(next_version())
+    if a and a[0] == "next" and len(a) <= 2:
+        print(next_version(a[1] if len(a) == 2 else ""))
     elif len(a) == 3 and a[0] == "stamp":
         stamp(a[1], a[2])
-    elif len(a) == 2 and a[0] == "record":
-        record(a[1])
+    elif a and a[0] == "record" and len(a) in (2, 3):
+        record(a[1], a[2] if len(a) == 3 else "")
     else:
         sys.exit(__doc__)

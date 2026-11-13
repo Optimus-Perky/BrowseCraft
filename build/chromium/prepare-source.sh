@@ -95,7 +95,7 @@ if ! done_ domsub; then
 fi
 
 # 5. BrowseCraft hooks
-for h in webstore extstore profile identity; do
+for h in webstore extstore profile identity updatecheck; do
   done_ "hook-$h" && continue
   (cd "$SRC" && python3 "$REPO/build/$h.py")
   mark "hook-$h"

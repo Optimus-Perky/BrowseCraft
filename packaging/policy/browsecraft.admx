@@ -3,7 +3,7 @@
      Chromium's templates). Copy browsecraft.admx to PolicyDefinitions and en-US\browsecraft.adml
      to PolicyDefinitions\en-US (the central store on SYSVOL, or C:\Windows on one PC). -->
 <policyDefinitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                   revision="1.1" schemaVersion="1.0" xmlns="http://schemas.microsoft.com/GroupPolicy/2006/07/PolicyDefinitions">
+                   revision="1.2" schemaVersion="1.0" xmlns="http://schemas.microsoft.com/GroupPolicy/2006/07/PolicyDefinitions">
   <policyNamespaces>
     <target prefix="browsecraft" namespace="BrowseCraft.Policies.BrowseCraft" />
     <using prefix="windows" namespace="Microsoft.Policies.Windows" />
@@ -12,6 +12,7 @@
   <supportedOn>
     <definitions>
       <definition name="SUPPORTED_BrowseCraft155" displayName="$(string.SUPPORTED_BrowseCraft155)" />
+      <definition name="SUPPORTED_BrowseCraftUpdateCheck" displayName="$(string.SUPPORTED_BrowseCraftUpdateCheck)" />
     </definitions>
   </supportedOn>
   <categories>
@@ -34,6 +35,23 @@
       <supportedOn ref="SUPPORTED_BrowseCraft155" />
       <elements>
         <text id="ExtensionStoreUrl" valueName="ExtensionStoreUrl" required="true" />
+      </elements>
+    </policy>
+    <policy name="UpdateCheckEnabled" class="Both" displayName="$(string.UpdateCheckEnabled)"
+            explainText="$(string.UpdateCheckEnabled_Explain)" key="Software\Policies\BrowseCraft"
+            valueName="UpdateCheckEnabled">
+      <parentCategory ref="BrowseCraft" />
+      <supportedOn ref="SUPPORTED_BrowseCraftUpdateCheck" />
+      <enabledValue><decimal value="1" /></enabledValue>
+      <disabledValue><decimal value="0" /></disabledValue>
+    </policy>
+    <policy name="UpdateCheckUrl" class="Both" displayName="$(string.UpdateCheckUrl)"
+            explainText="$(string.UpdateCheckUrl_Explain)" presentation="$(presentation.UpdateCheckUrl)"
+            key="Software\Policies\BrowseCraft">
+      <parentCategory ref="BrowseCraft" />
+      <supportedOn ref="SUPPORTED_BrowseCraftUpdateCheck" />
+      <elements>
+        <text id="UpdateCheckUrl" valueName="UpdateCheckUrl" required="true" />
       </elements>
     </policy>
   </policies>

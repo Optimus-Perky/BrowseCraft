@@ -1,0 +1,11 @@
+{
+ "version": "0.8.261017.1",
+ "date": "2026-10-17",
+ "chromium": "155.0.8059.39",
+ "chromium_from": "155.0.8059.39",
+ "new": [],
+ "fixed": [
+  "Extensions that sign you in through the browser's sign-in window stay signed in again, instead of asking at every start."
+ ],
+ "security": null
+}

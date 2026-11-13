@@ -1,0 +1,23 @@
+# Copyright 2026 The BrowseCraft Authors
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+# BrowseCraft's update check, the parts with no browser in them. The browser
+# itself compiles these files in //chrome/browser; this target tests them:
+#   ninja -C out/Default browsecraft_update_unittests
+# A plain executable with its own main: Chromium's test() and run_all_unittests
+# want test fonts and data the release tarball does not carry.
+executable("browsecraft_update_unittests") {
+  testonly = true
+  sources = [
+    "browsecraft_update_logic.cc",
+    "browsecraft_update_logic.h",
+    "browsecraft_update_logic_unittest.cc",
+    "browsecraft_update_unittest_main.cc",
+  ]
+  deps = [
+    "//base",
+    "//testing/gtest",
+    "//url",
+  ]
+}
