@@ -1,0 +1,7 @@
+use-oauth2-client-switches-as-default.patch
+chromium-138-drop-nodejs-version-check.patch
+chromium-153-revert-hermetic-python.patch
+chromium-154-use-system-tsc.patch
+chromium-155-use-system-esbuild.patch
+chromium-156-remove-private-verification-tokens.patch
+chromium-156-revert-use-typescript-go.patch

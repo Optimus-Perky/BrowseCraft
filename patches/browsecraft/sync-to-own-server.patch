@@ -1,18 +1,16 @@
-diff -ruN a/chrome/browser/ui/webui/BUILD.gn b/chrome/browser/ui/webui/BUILD.gn
---- a/chrome/browser/ui/webui/BUILD.gn	2026-10-09 19:00:23.507601026 +0000
-+++ b/chrome/browser/ui/webui/BUILD.gn	2026-10-09 19:00:23.508065969 +0000
-@@ -31,6 +31,8 @@
- 
- source_set("configs") {
+--- a/chrome/browser/ui/webui/BUILD.gn
++++ b/chrome/browser/ui/webui/BUILD.gn
+@@ -36,6 +36,8 @@
+     "chrome_web_ui_configs.h",
+   ]
    sources = [
 +    "browsecraft/browsecraft_ui.cc",
 +    "browsecraft/browsecraft_ui.h",
      "chrome_untrusted_web_ui_configs.cc",
-     "chrome_untrusted_web_ui_configs.h",
      "chrome_web_ui_configs.cc",
-diff -ruN a/chrome/browser/ui/webui/browsecraft/browsecraft_ui.cc b/chrome/browser/ui/webui/browsecraft/browsecraft_ui.cc
---- a/chrome/browser/ui/webui/browsecraft/browsecraft_ui.cc	1970-01-01 00:00:00.000000000 +0000
-+++ b/chrome/browser/ui/webui/browsecraft/browsecraft_ui.cc	2026-10-09 19:00:23.501318177 +0000
+   ]
+--- a/chrome/browser/ui/webui/browsecraft/browsecraft_ui.cc
++++ b/chrome/browser/ui/webui/browsecraft/browsecraft_ui.cc
 @@ -0,0 +1,381 @@
 +// Copyright 2026 The BrowseCraft Authors
 +// Use of this source code is governed by a BSD-style license that can be
@@ -395,9 +393,8 @@ diff -ruN a/chrome/browser/ui/webui/browsecraft/browsecraft_ui.cc b/chrome/brows
 +BrowseCraftUI::~BrowseCraftUI() = default;
 +
 +WEB_UI_CONTROLLER_TYPE_IMPL(BrowseCraftUI)
-diff -ruN a/chrome/browser/ui/webui/browsecraft/browsecraft_ui.h b/chrome/browser/ui/webui/browsecraft/browsecraft_ui.h
---- a/chrome/browser/ui/webui/browsecraft/browsecraft_ui.h	1970-01-01 00:00:00.000000000 +0000
-+++ b/chrome/browser/ui/webui/browsecraft/browsecraft_ui.h	2026-10-09 19:00:23.501543538 +0000
+--- a/chrome/browser/ui/webui/browsecraft/browsecraft_ui.h
++++ b/chrome/browser/ui/webui/browsecraft/browsecraft_ui.h
 @@ -0,0 +1,33 @@
 +// Copyright 2026 The BrowseCraft Authors
 +// Use of this source code is governed by a BSD-style license that can be
@@ -432,10 +429,9 @@ diff -ruN a/chrome/browser/ui/webui/browsecraft/browsecraft_ui.h b/chrome/browse
 +};
 +
 +#endif  // CHROME_BROWSER_UI_WEBUI_BROWSECRAFT_BROWSECRAFT_UI_H_
-diff -ruN a/chrome/browser/ui/webui/chrome_web_ui_configs.cc b/chrome/browser/ui/webui/chrome_web_ui_configs.cc
---- a/chrome/browser/ui/webui/chrome_web_ui_configs.cc	2026-10-09 19:00:23.508374892 +0000
-+++ b/chrome/browser/ui/webui/chrome_web_ui_configs.cc	2026-10-09 19:00:23.508867049 +0000
-@@ -96,6 +96,7 @@
+--- a/chrome/browser/ui/webui/chrome_web_ui_configs.cc
++++ b/chrome/browser/ui/webui/chrome_web_ui_configs.cc
+@@ -102,6 +102,7 @@
  #include "chrome/browser/ui/webui/app_service_internals/app_service_internals_ui.h"
  #include "chrome/browser/ui/webui/autofill_ml_internals/autofill_ml_internals_ui.h"
  #include "chrome/browser/ui/webui/bookmarks/bookmarks_ui.h"
@@ -443,7 +439,7 @@ diff -ruN a/chrome/browser/ui/webui/chrome_web_ui_configs.cc b/chrome/browser/ui
  #include "chrome/browser/ui/webui/color_pipeline_internals/color_pipeline_internals_ui.h"
  #include "chrome/browser/ui/webui/commerce/shopping_insights_side_panel_ui.h"
  #include "chrome/browser/ui/webui/critical_actions/critical_actions_ui.h"
-@@ -264,6 +265,7 @@
+@@ -270,6 +271,7 @@
  #endif  // BUILDFLAG(IS_CHROMEOS)
  
    auto& map = content::WebUIConfigMap::GetInstance();
@@ -451,9 +447,8 @@ diff -ruN a/chrome/browser/ui/webui/chrome_web_ui_configs.cc b/chrome/browser/ui
    map.AddWebUIConfig(std::make_unique<AccessibilityUIConfig>());
    map.AddWebUIConfig(std::make_unique<AutofillInternalsUIConfig>());
    map.AddWebUIConfig(std::make_unique<BluetoothInternalsUIConfig>());
-diff -ruN a/components/sync/base/pref_names.h b/components/sync/base/pref_names.h
---- a/components/sync/base/pref_names.h	2026-10-09 19:00:23.501770531 +0000
-+++ b/components/sync/base/pref_names.h	2026-10-09 19:00:23.502183640 +0000
+--- a/components/sync/base/pref_names.h
++++ b/components/sync/base/pref_names.h
 @@ -13,6 +13,12 @@
  inline constexpr char kEnableLocalSyncBackend[] =
      "sync.enable_local_sync_backend";
@@ -467,70 +462,100 @@ diff -ruN a/components/sync/base/pref_names.h b/components/sync/base/pref_names.
  // Specifies the local sync backend directory. The name is chosen to mimic
  // user-data-dir etc. This flag only matters if the enable-local-sync-backend
  // flag is present.
-diff -ruN a/components/sync/engine/sync_engine.h b/components/sync/engine/sync_engine.h
---- a/components/sync/engine/sync_engine.h	2026-10-09 19:00:23.504216685 +0000
-+++ b/components/sync/engine/sync_engine.h	2026-10-09 19:00:23.504557460 +0000
-@@ -64,6 +64,9 @@
-     std::unique_ptr<SyncManagerFactory> sync_manager_factory;
-     bool enable_local_sync_backend = false;
-     base::FilePath local_sync_backend_folder;
-+    // BrowseCraft: with local sync on, a token for the user's own server
-+    // (`service_url`), which is then used instead of the loopback server.
-+    std::string remote_access_token;
-     std::unique_ptr<EngineComponentsFactory> engine_components_factory;
-     scoped_refptr<os_crypt_async::Encryptor> encryptor;
-   };
-diff -ruN a/components/sync/engine/sync_manager.h b/components/sync/engine/sync_manager.h
---- a/components/sync/engine/sync_manager.h	2026-10-09 19:00:23.504923701 +0000
-+++ b/components/sync/engine/sync_manager.h	2026-10-09 19:00:23.505300404 +0000
-@@ -83,6 +83,10 @@
-     bool enable_local_sync_backend = false;
-     base::FilePath local_sync_backend_folder;
+--- a/components/sync/engine/engine_components_factory_impl.cc
++++ b/components/sync/engine/engine_components_factory_impl.cc
+@@ -9,7 +9,9 @@
  
-+    // BrowseCraft: with local sync on, the token for the user's own server at
-+    // `service_url`, used instead of the loopback server.
-+    std::string remote_access_token;
+ #include "base/check.h"
+ #include "base/check_op.h"
++#include "base/logging.h"
+ #include "base/memory/ptr_util.h"
++#include "components/signin/public/identity_manager/access_token_info.h"
+ #include "components/sync/engine/backoff_delay_provider.h"
+ #include "components/sync/engine/cycle/sync_cycle_context.h"
+ #include "components/sync/engine/loopback_server/loopback_connection_manager.h"
+@@ -69,6 +71,23 @@
+       local_sync_backend_folder));
+ }
+ 
++// static
++std::unique_ptr<EngineComponentsFactoryImpl>
++EngineComponentsFactoryImpl::CreateForBrowseCraftServer(
++    const Switches& switches,
++    const GURL& service_url,
++    HttpPostProviderFactoryGetter http_factory_getter,
++    const std::string& access_token) {
++  CHECK(http_factory_getter);
++  CHECK(!access_token.empty());
++  std::unique_ptr<EngineComponentsFactoryImpl> factory =
++      base::WrapUnique(new EngineComponentsFactoryImpl(
++          switches, service_url, std::move(http_factory_getter),
++          /*local_sync_backend_folder=*/std::nullopt));
++  factory->browsecraft_access_token_ = access_token;
++  return factory;
++}
 +
-     // Used to communicate with the sync server.
-     std::unique_ptr<HttpPostProviderFactory> post_factory;
+ EngineComponentsFactoryImpl::EngineComponentsFactoryImpl(
+     const Switches& switches,
+     const GURL& service_url,
+@@ -97,7 +116,8 @@
+       std::make_unique<SyncSchedulerImpl>(
+           name, std::move(delay), context,
+           std::make_unique<Syncer>(cancelation_signal),
+-          /*ignore_auth_credentials=*/local_sync_backend_folder_.has_value());
++          /*ignore_auth_credentials=*/local_sync_backend_folder_.has_value() ||
++              !browsecraft_access_token_.empty());
+   if (switches_.force_short_nudge_delay_for_test) {
+     scheduler->ForceShortNudgeDelayForTest();
+   }
+@@ -133,9 +153,17 @@
+   }
  
-diff -ruN a/components/sync/engine/sync_manager_impl.cc b/components/sync/engine/sync_manager_impl.cc
---- a/components/sync/engine/sync_manager_impl.cc	2026-10-09 19:00:23.506871661 +0000
-+++ b/components/sync/engine/sync_manager_impl.cc	2026-10-09 19:00:23.507204522 +0000
-@@ -163,7 +163,17 @@
-   sync_status_tracker_->SetHasKeystoreKey(
-       !sync_encryption_handler_->GetKeystoreKeysHandler()->NeedKeystoreKey());
- 
--  if (args->enable_local_sync_backend) {
-+  if (args->enable_local_sync_backend && !args->remote_access_token.empty()) {
-+    // BrowseCraft: no Google account; the user's own server, with the token
-+    // it gave at sign-in.
-+    VLOG(1) << "Running against the BrowseCraft server " << args->service_url;
-+    connection_manager_ = std::make_unique<SyncServerConnectionManager>(
-+        MakeConnectionURL(args->service_url, args->cache_guid),
-+        std::move(args->post_factory), args->cancelation_signal);
+   CHECK(http_factory_getter_);
+-  return std::make_unique<SyncServerConnectionManager>(
++  auto connection_manager = std::make_unique<SyncServerConnectionManager>(
+       MakeConnectionURL(service_url_, cache_guid),
+       std::move(http_factory_getter_).Run(), cancelation_signal);
++  if (!browsecraft_access_token_.empty()) {
++    // BrowseCraft: the user's own server, with the token from sign-in.
++    VLOG(1) << "Running against the BrowseCraft server " << service_url_;
 +    signin::AccessTokenInfo token;
-+    token.token = args->remote_access_token;
-+    connection_manager_->SetAccessTokenInfo(token);
-+  } else if (args->enable_local_sync_backend) {
-     VLOG(1) << "Running against local sync backend.";
-     sync_status_tracker_->SetLocalBackendFolder(
-         args->local_sync_backend_folder.AsUTF8Unsafe());
-diff -ruN a/components/sync/service/glue/sync_engine_backend.cc b/components/sync/service/glue/sync_engine_backend.cc
---- a/components/sync/service/glue/sync_engine_backend.cc	2026-10-09 19:00:23.505789102 +0000
-+++ b/components/sync/service/glue/sync_engine_backend.cc	2026-10-09 19:00:23.506476180 +0000
-@@ -311,6 +311,7 @@
-   args.service_url = params.service_url;
-   args.enable_local_sync_backend = params.enable_local_sync_backend;
-   args.local_sync_backend_folder = params.local_sync_backend_folder;
-+  args.remote_access_token = params.remote_access_token;
-   args.post_factory = std::move(params.http_factory_getter).Run();
-   args.encryption_observer_proxy = std::move(params.encryption_observer_proxy);
-   args.extensions_activity = params.extensions_activity.get();
-diff -ruN a/components/sync/service/sync_prefs.cc b/components/sync/service/sync_prefs.cc
---- a/components/sync/service/sync_prefs.cc	2026-10-09 19:00:23.502576191 +0000
-+++ b/components/sync/service/sync_prefs.cc	2026-10-09 19:00:23.503114420 +0000
-@@ -192,6 +192,9 @@
++    token.token = browsecraft_access_token_;
++    connection_manager->SetAccessTokenInfo(token);
++  }
++  return connection_manager;
+ }
+ 
+ }  // namespace syncer
+--- a/components/sync/engine/engine_components_factory_impl.h
++++ b/components/sync/engine/engine_components_factory_impl.h
+@@ -37,6 +37,14 @@
+       const Switches& switches,
+       const base::FilePath& local_sync_backend_folder);
+ 
++  // BrowseCraft: local sync mode (no Google account, no OAuth), but over HTTP
++  // to the user's own sync server, with the token it gave at sign-in.
++  static std::unique_ptr<EngineComponentsFactoryImpl>
++  CreateForBrowseCraftServer(const Switches& switches,
++                             const GURL& service_url,
++                             HttpPostProviderFactoryGetter http_factory_getter,
++                             const std::string& access_token);
++
+   EngineComponentsFactoryImpl(const EngineComponentsFactoryImpl&) = delete;
+   EngineComponentsFactoryImpl& operator=(const EngineComponentsFactoryImpl&) =
+       delete;
+@@ -75,6 +83,8 @@
+   const GURL service_url_;
+   HttpPostProviderFactoryGetter http_factory_getter_;
+   const std::optional<base::FilePath> local_sync_backend_folder_;
++  // BrowseCraft: set only by CreateForBrowseCraftServer().
++  std::string browsecraft_access_token_;
+ };
+ 
+ }  // namespace syncer
+--- a/components/sync/service/sync_prefs.cc
++++ b/components/sync/service/sync_prefs.cc
+@@ -196,6 +196,9 @@
    registry->RegisterIntegerPref(
        prefs::internal::kSyncPassphrasePromptMutedProductVersion, 0);
    registry->RegisterBooleanPref(prefs::kEnableLocalSyncBackend, false);
@@ -540,7 +565,7 @@ diff -ruN a/components/sync/service/sync_prefs.cc b/components/sync/service/sync
    registry->RegisterFilePathPref(prefs::kLocalSyncBackendDir, base::FilePath());
  #if BUILDFLAG(ENABLE_DICE_SUPPORT)
    registry->RegisterBooleanPref(kAutofillPerAccountPrefMigrationDone, false);
-@@ -775,6 +778,14 @@
+@@ -783,6 +786,14 @@
    return local_sync_enabled_;
  }
  
@@ -555,9 +580,8 @@ diff -ruN a/components/sync/service/sync_prefs.cc b/components/sync/service/sync
  int SyncPrefs::GetPassphrasePromptMutedProductVersion() const {
    return pref_service_->GetInteger(
        prefs::internal::kSyncPassphrasePromptMutedProductVersion);
-diff -ruN a/components/sync/service/sync_prefs.h b/components/sync/service/sync_prefs.h
---- a/components/sync/service/sync_prefs.h	2026-10-09 19:00:23.503447211 +0000
-+++ b/components/sync/service/sync_prefs.h	2026-10-09 19:00:23.503774022 +0000
+--- a/components/sync/service/sync_prefs.h
++++ b/components/sync/service/sync_prefs.h
 @@ -194,6 +194,11 @@
    // Gets the local sync backend enabled state.
    bool IsLocalSyncEnabled() const;
@@ -570,20 +594,27 @@ diff -ruN a/components/sync/service/sync_prefs.h b/components/sync/service/sync_
    // The user's passphrase type, determined the first time the engine is
    // successfully initialized.
    std::optional<PassphraseType> GetCachedPassphraseType() const;
-diff -ruN a/components/sync/service/sync_service_impl.cc b/components/sync/service/sync_service_impl.cc
---- a/components/sync/service/sync_service_impl.cc	2026-10-09 19:00:23.509132614 +0000
-+++ b/components/sync/service/sync_service_impl.cc	2026-10-09 19:00:23.509798446 +0000
-@@ -649,6 +649,13 @@
-     params.enable_local_sync_backend = true;
-     params.local_sync_backend_folder =
-         sync_client_->GetLocalSyncBackendFolder();
-+    // BrowseCraft: signed in to the user's own sync server.
-+    const GURL browsecraft_server(sync_prefs_.GetBrowseCraftSyncServer());
-+    const std::string browsecraft_token = sync_prefs_.GetBrowseCraftSyncToken();
-+    if (browsecraft_server.is_valid() && !browsecraft_token.empty()) {
-+      params.service_url = browsecraft_server;
-+      params.remote_access_token = browsecraft_token;
-+    }
-   }
-   params.engine_components_factory =
-       std::make_unique<EngineComponentsFactoryImpl>(
+--- a/components/sync/service/sync_service_impl.cc
++++ b/components/sync/service/sync_service_impl.cc
+@@ -640,7 +640,20 @@
+ 
+   params.sync_manager_factory =
+       std::make_unique<SyncManagerFactory>(network_connection_tracker_);
+-  if (sync_prefs_.IsLocalSyncEnabled()) {
++  // BrowseCraft: signed in to the user's own sync server.
++  const GURL browsecraft_server(sync_prefs_.GetBrowseCraftSyncServer());
++  const std::string browsecraft_token = sync_prefs_.GetBrowseCraftSyncToken();
++  if (sync_prefs_.IsLocalSyncEnabled() && browsecraft_server.is_valid() &&
++      !browsecraft_token.empty()) {
++    params.engine_components_factory =
++        EngineComponentsFactoryImpl::CreateForBrowseCraftServer(
++            EngineSwitchesFromCommandLine(), browsecraft_server,
++            base::BindOnce(
++                create_http_post_provider_factory_override_for_test_.value_or(
++                    create_http_post_provider_factory_),
++                MakeUserAgentForSync(channel_), url_loader_factory_->Clone()),
++            browsecraft_token);
++  } else if (sync_prefs_.IsLocalSyncEnabled()) {
+     params.engine_components_factory =
+         EngineComponentsFactoryImpl::CreateForLocalSync(
+             EngineSwitchesFromCommandLine(),

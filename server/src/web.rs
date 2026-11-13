@@ -377,14 +377,14 @@ mod tests {
     #[tokio::test]
     async fn sign_in_then_sync() {
         let db = store::open(":memory:").unwrap();
-        store::add_user(&db, "mark", "a long password", true).unwrap();
+        store::add_user(&db, "sam", "a long password", true).unwrap();
         let app = router(db, None);
         let req = |body: &str| {
             axum::http::Request::post("/api/sign-in").header("content-type", "application/json").body(axum::body::Body::from(body.to_string())).unwrap()
         };
-        let (s, _) = call(&app, req(r#"{"user":"mark","password":"wrong one!"}"#)).await;
+        let (s, _) = call(&app, req(r#"{"user":"sam","password":"wrong one!"}"#)).await;
         assert_eq!(s, StatusCode::UNAUTHORIZED);
-        let (s, b) = call(&app, req(r#"{"user":"Mark","password":"a long password","device":"PC01"}"#)).await;
+        let (s, b) = call(&app, req(r#"{"user":"Sam","password":"a long password","device":"PC01"}"#)).await;
         assert_eq!(s, StatusCode::OK);
         let v: serde_json::Value = serde_json::from_slice(&b).unwrap();
         let token = v["token"].as_str().unwrap().to_string();

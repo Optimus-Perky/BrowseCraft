@@ -1,7 +1,6 @@
-diff -ruN a/chrome/browser/ui/bookmarks/bookmark_ui_operations_helper.cc b/chrome/browser/ui/bookmarks/bookmark_ui_operations_helper.cc
---- a/chrome/browser/ui/bookmarks/bookmark_ui_operations_helper.cc	2026-10-10 11:20:48.282295576 +0100
-+++ b/chrome/browser/ui/bookmarks/bookmark_ui_operations_helper.cc	2026-10-10 11:20:51.194300255 +0100
-@@ -472,6 +472,11 @@
+--- a/chrome/browser/ui/bookmarks/bookmark_ui_operations_helper.cc
++++ b/chrome/browser/ui/bookmarks/bookmark_ui_operations_helper.cc
+@@ -473,6 +473,11 @@
    CHECK(!moved_nodes.empty());
    for (const auto& moved_node : moved_nodes) {
      CHECK(!model_->client()->IsNodeManaged(moved_node));
@@ -13,22 +12,21 @@ diff -ruN a/chrome/browser/ui/bookmarks/bookmark_ui_operations_helper.cc b/chrom
      model_->Move(moved_node, parent, index_to_add_at);
      index_to_add_at = parent->GetIndexOf(moved_node).value() + 1;
    }
-@@ -626,6 +631,12 @@
+@@ -653,6 +658,12 @@
  
    for (const auto& moved_node : moved_nodes) {
      CHECK(!model()->client()->IsNodeManaged(moved_node));
 +    // BrowseCraft: skip a folder dropped into itself or its own subfolders.
 +    const bookmarks::BookmarkNode* target_folder =
-+        parent_folder().as_non_permanent_folder();
++        folder->as_non_permanent_folder();
 +    if (target_folder && target_folder->HasAncestor(moved_node)) {
 +      continue;
 +    }
-     merged_surface_service_->Move(moved_node, parent_folder(), index_to_add_at,
+     merged_surface_service_->Move(moved_node, *folder, index_to_add_at,
                                    browser);
      index_to_add_at++;
-diff -ruN a/components/bookmarks/browser/bookmark_model.cc b/components/bookmarks/browser/bookmark_model.cc
---- a/components/bookmarks/browser/bookmark_model.cc	2026-10-10 10:45:18.570009117 +0100
-+++ b/components/bookmarks/browser/bookmark_model.cc	2026-10-10 11:20:51.196300258 +0100
+--- a/components/bookmarks/browser/bookmark_model.cc
++++ b/components/bookmarks/browser/bookmark_model.cc
 @@ -574,6 +574,12 @@
    DCHECK(!is_root_node(new_parent));
    DCHECK(!is_permanent_node(node));

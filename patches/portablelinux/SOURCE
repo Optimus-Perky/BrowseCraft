@@ -1,0 +1,28 @@
+From ungoogled-chromium-portablelinux (BSD-3-Clause, LICENSE here), tag 156.0.8078.79-1,
+commit 6f0aa178c239, patches/ungoogled-chromium/portablelinux/. Build-host fixes for building
+Chromium from the release tarball on Linux with the distribution's node, tsc and esbuild; used
+for both the Linux and the Windows (cross-built on Linux) trees. Changed for BrowseCraft where a
+patch no longer applied to a newer Chromium: see "Fitted" below.
+
+Fitted:
+  chromium-154-use-system-tsc.patch          webui_features.gni hunk: new context in 157
+  chromium-155-use-system-esbuild.patch      regenerated (applied with fuzz 2 on 157)
+  chromium-156-remove-private-verification-tokens.patch
+                                             chrome/browser/devtools/BUILD.gn and chrome/test/BUILD.gn:
+                                             the same dependency lines removed, new context in 157;
+                                             plus the chrome_devtools_session.cc hunk of
+                                             chromium-156-revert-crubit-changes.patch (no StorageHandler:
+                                             without its token methods it is abstract), which portablelinux
+                                             carried in the Crubit revert; and, new in 157,
+                                             chrome_browsing_data_remover_delegate_factory.cc's
+                                             DependsOn(PrivateVerificationTokensServiceFactory)
+Dropped:
+  fix-compiling-on-arm64.patch               only for arm64 build hosts (Rust/bindgen built locally);
+                                             BrowseCraft builds on x64 with Chromium's own toolchain
+  chromium-156-revert-crubit-changes.patch   portablelinux's own self-built Rust (arm64) has no Crubit;
+                                             Chromium's Rust toolchain package ships it
+                                             (third_party/rust-toolchain/lib/third_party/crubit), so
+                                             BrowseCraft keeps Chromium's Crubit code (web bundles,
+                                             isolated web apps, fonts, data decoder) unchanged
+Applied unchanged: use-oauth2-client-switches-as-default, chromium-138-drop-nodejs-version-check,
+  chromium-153-revert-hermetic-python, chromium-156-revert-use-typescript-go.

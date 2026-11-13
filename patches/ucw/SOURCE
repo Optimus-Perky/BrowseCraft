@@ -1,0 +1,11 @@
+From ungoogled-chromium-windows (BSD-3-Clause, LICENSE here), tag 157.0.8103.50-1.1, commit
+328db819f7da, patches/ungoogled-chromium/windows/. Applied to the Windows tree only, after the
+common tree (ungoogled core + patches/portablelinux + BrowseCraft) has been copied for Windows
+(build/chromium/win-prepare.sh).
+
+Left out (4 of ucw's 26), because BrowseCraft cross-builds on Linux with Chromium's own clang,
+Rust and the build host's python3/tsc, not natively on Windows with LLVM's release:
+  windows-fix-unsupported-llvm-flags.patch   for LLVM's release build of clang-cl
+  windows-fix-building-without-crubit.patch  portablelinux/chromium-156-revert-crubit-changes does it
+  windows-fix-python.patch                   portablelinux/chromium-153-revert-hermetic-python does it
+  windows-fix-typescript-lib-dom.patch       for the Windows tsc; the tree uses the host's tsc

@@ -1,0 +1,5 @@
+# ungoogled-chromium core patches BrowseCraft leaves out (the core stays vendored unchanged;
+# prepare-source.sh skips these lines of its series). One per line, as in the core series.
+#
+# No chrome://ungoogled-first-run tab on first start (decided 2026-10-12).
+extra/ungoogled-chromium/first-run-page.patch

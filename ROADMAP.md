@@ -33,8 +33,8 @@
     (e.g. `ExtensionStoreUrl`, beside the sync server address) sets them, through the ADMX
     templates on Windows and the JSON policy file on Linux. With no policy set, the store is
     simply off (Google's stays blocked).
-  - **Who gets which extension: per user, per AD group or per PC, chosen per extension (
-    2026-10-11).** Each approved extension has assignments: everyone, named users, AD groups
+  - **Who gets which extension: per user, per AD group or per PC, chosen per extension
+    (2026-10-11).** Each approved extension has assignments: everyone, named users, AD groups
     (through the server's existing LDAP connection), named PCs or AD computer groups; and a mode
     for each: offered in the store, or installed automatically. User and group assignments follow
     the person to any PC they sign in to (the server can hand them out through the sync connection,

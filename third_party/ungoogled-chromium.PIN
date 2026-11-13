@@ -1,0 +1,8 @@
+# ungoogled-chromium core, vendored as is (BSD-3-Clause, see ungoogled-chromium/LICENSE).
+# Source: https://github.com/ungoogled-software/ungoogled-chromium
+tag=157.0.8103.50-1
+commit=f5d393f22a60fa4f79f42dbb26acd0bcc01995ae
+chromium=157.0.8103.50
+vendored=2026-11-13
+# Update with build/update-ungoogled.sh <tag> (never edit files under ungoogled-chromium/ by hand:
+# BrowseCraft's changes are its own patches in patches/ and build/*.py).

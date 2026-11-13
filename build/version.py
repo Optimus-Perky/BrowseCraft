@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""BrowseCraft's own version: v<release>.<yymmdd>.<build of the day>, e.g. v0.8.261013.1 (
-2026-10-13: "a version number under about to signify what build it is", and in the installer's
+"""BrowseCraft's own version: v<release>.<yymmdd>.<build of the day>, e.g. v0.8.261013.1
+(2026-10-13: "a version number under about to signify what build it is", and in the installer's
 file name). The release is in VERSION at the top of the repo; build/builds.log lists every
 version an installer was made from, which is how the next build of the day is counted.
 

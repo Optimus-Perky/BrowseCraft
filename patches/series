@@ -1,4 +1,3 @@
-browsecraft/fix-non-official-link.patch
 browsecraft/sync-to-own-server.patch
 browsecraft/restore-sync-service.patch
 browsecraft/sync-without-security-events.patch

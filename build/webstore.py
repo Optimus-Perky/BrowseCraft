@@ -101,6 +101,18 @@ EDITS = {
     # ungoogled's inox 0005-disable-default-extensions.patch empties these two, so the store's
     # "complete install" never downloads or installs anything.
     "extensions/browser/webstore_installer.cc": [
+        # From 157 the same patch also deletes the download folder's name, which DownloadCrx uses.
+        ("""constexpr base::TimeDelta kTimeRemainingThreshold = base::Seconds(1);
+
+base::FilePath* g_download_directory_for_tests = nullptr;""",
+         """constexpr base::TimeDelta kTimeRemainingThreshold = base::Seconds(1);
+
+// Folder for downloading crx files from the webstore. This is used so that the
+// crx files don't go via the usual downloads folder.
+const base::FilePath::CharType kWebstoreDownloadFolder[] =
+    FILE_PATH_LITERAL("Webstore Downloads");
+
+base::FilePath* g_download_directory_for_tests = nullptr;"""),
         ("""void WebstoreInstaller::DownloadCrx(const ExtensionId& extension_id,
                                     InstallSource source) {
 }""",

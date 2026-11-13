@@ -36,5 +36,6 @@ $SSH "powershell -NoProfile -ExecutionPolicy Bypass -File C:\\bcbuild\\wixbuild.
 mkdir -p "$OUT"
 $SCP "$WIX_USER@$WIX_HOST:C:/bcbuild/BrowseCraft.exe" "$OUT/$EXE"
 ( cd "$OUT" && sha256sum "$EXE" | tee "$EXE.sha256" )
+echo "$VERSION" > "$OUT/$EXE.version"   # the bundle's version (what Windows lists as installed)
 python3 build/version.py record "$BCVER"
 $SSH "powershell -NoProfile -Command \"Remove-Item C:\bcbuild -Recurse -Force -EA 0\"" >/dev/null

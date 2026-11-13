@@ -5,7 +5,7 @@ An extension signs in by opening its provider's login page with a return address
 https://<extension id>.chromiumapp.org/; the browser catches that address and hands the result
 to the extension. ungoogled-chromium's domain substitution turns chromiumapp.org into
 ch40m1umapp.qjz9zk, so every provider refuses the return address and the extension never keeps
-its login (found 2026-10-17: the Claude extension asked the user to sign in every time). No request
+its login (found 2026-10-17: the Claude extension asked to sign in every time). No request
 ever goes to chromiumapp.org; the browser only matches the address, so putting it back contacts
 nobody.
 
