@@ -5,6 +5,7 @@ data/
 assets/logo-options/round3/*.geojson
 *.png
 !assets/logo-options/**/*.png
+!assets/browsecraft-logo-256.png
 build/branding/out/
 build/branding/work/
 build/branding/resvg

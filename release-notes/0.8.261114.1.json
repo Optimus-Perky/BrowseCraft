@@ -1,0 +1,526 @@
+{
+ "version": "0.8.261114.1",
+ "date": "2026-11-14",
+ "chromium": "157.0.8103.80",
+ "chromium_from": "157.0.8103.50",
+ "new": [
+  "Chromium updated to 157.0.8103.80."
+ ],
+ "fixed": [],
+ "security": {
+  "source": "chrome-releases",
+  "fixes": 83,
+  "highest": "critical",
+  "in_the_wild": false,
+  "scope": "range",
+  "releases": [
+   {
+    "chromium": "157.0.8103.78",
+    "date": "2026-11-11",
+    "notes": "https://chromereleases.googleblog.com/2026/11/stable-channel-update-for-desktop_01744469280.html",
+    "fixes": 83,
+    "items": [
+     {
+      "cve": "CVE-2026-126885",
+      "severity": "critical",
+      "title": "Use after free in ServiceWorker",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-126895",
+      "severity": "critical",
+      "title": "Use after free in CSS",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-126879",
+      "severity": "critical",
+      "title": "Use after free in Layout",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-126846",
+      "severity": "critical",
+      "title": "Use after free in Skia",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-126911",
+      "severity": "critical",
+      "title": "Use after free in Accessibility",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-126864",
+      "severity": "high",
+      "title": "Use after free in V8",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-126889",
+      "severity": "high",
+      "title": "Off-by-one error in V8",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-126859",
+      "severity": "high",
+      "title": "Link following in FileSystem",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-126886",
+      "severity": "high",
+      "title": "Use after free in Frames",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-126887",
+      "severity": "high",
+      "title": "Use after free in Animation",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-126870",
+      "severity": "high",
+      "title": "Uninitialized resource in ANGLE",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-126912",
+      "severity": "high",
+      "title": "Buffer overflow in Skia",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-126919",
+      "severity": "high",
+      "title": "Use after free in BrowserTag",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-126878",
+      "severity": "high",
+      "title": "Information leak in Core",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-126909",
+      "severity": "high",
+      "title": "Use after free in Passwords",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-126847",
+      "severity": "high",
+      "title": "Type confusion in V8",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-126853",
+      "severity": "high",
+      "title": "Uninitialized resource in Skia",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-126865",
+      "severity": "high",
+      "title": "Use after free in DOM",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-126916",
+      "severity": "high",
+      "title": "Integer overflow in V8",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-126903",
+      "severity": "high",
+      "title": "Improper state validation in ANGLE",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-126910",
+      "severity": "high",
+      "title": "Type confusion in V8",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-126842",
+      "severity": "high",
+      "title": "Use after free in ANGLE",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-126898",
+      "severity": "high",
+      "title": "Uninitialized resource in Skia",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-126871",
+      "severity": "high",
+      "title": "Out of bounds read in Skia",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-126875",
+      "severity": "high",
+      "title": "Missing authorization in V8",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-126862",
+      "severity": "high",
+      "title": "Improper input validation in Core",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-126900",
+      "severity": "high",
+      "title": "Use after free in CSS",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-126904",
+      "severity": "high",
+      "title": "Use after free in Compositing",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-126907",
+      "severity": "high",
+      "title": "Uninitialized resource in Media",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-126851",
+      "severity": "high",
+      "title": "Use after free in Accessibility",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-126845",
+      "severity": "high",
+      "title": "Uninitialized resource in GPU",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-126881",
+      "severity": "high",
+      "title": "Improper initialization in Media",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-126867",
+      "severity": "high",
+      "title": "Use after free in Browser",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-126863",
+      "severity": "high",
+      "title": "Use after free in HTML",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-126896",
+      "severity": "high",
+      "title": "Missing authorization in V8",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-126869",
+      "severity": "high",
+      "title": "Use after free in Frames",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-126858",
+      "severity": "high",
+      "title": "Uninitialized resource in ANGLE",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-126891",
+      "severity": "high",
+      "title": "Use after free in V8",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-126874",
+      "severity": "high",
+      "title": "Type confusion in V8",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-126876",
+      "severity": "high",
+      "title": "Integer overflow in Skia",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-126918",
+      "severity": "high",
+      "title": "Use after free in Layout",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-126866",
+      "severity": "high",
+      "title": "Incorrect authorization in Extensions",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-126844",
+      "severity": "high",
+      "title": "Uninitialized resource in Skia",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-126884",
+      "severity": "high",
+      "title": "Out of bounds read in Skia",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-126894",
+      "severity": "high",
+      "title": "Out of bounds read in Skia",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-126861",
+      "severity": "high",
+      "title": "Use after free in Media",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-126917",
+      "severity": "high",
+      "title": "Memory corruption in V8",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-126856",
+      "severity": "high",
+      "title": "Incomplete cleanup in Cache",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-126905",
+      "severity": "high",
+      "title": "Incomplete cleanup in V8",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-126873",
+      "severity": "high",
+      "title": "Use after free in Extensions",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-126922",
+      "severity": "high",
+      "title": "Out of bounds read in Skia",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-126914",
+      "severity": "high",
+      "title": "Uninitialized resource in Skia",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-126880",
+      "severity": "high",
+      "title": "Type confusion in V8",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-126872",
+      "severity": "high",
+      "title": "Incorrect authorization in FileSystem",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-126877",
+      "severity": "high",
+      "title": "Use after free in Dawn",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-126888",
+      "severity": "high",
+      "title": "Buffer overflow in Turbolev",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-126843",
+      "severity": "high",
+      "title": "Type confusion in Turbolev",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-126854",
+      "severity": "high",
+      "title": "Incorrect authorization in Layout",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-126892",
+      "severity": "high",
+      "title": "Use after free in MediaStream",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-126897",
+      "severity": "high",
+      "title": "Type confusion in V8",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-126857",
+      "severity": "high",
+      "title": "Out of bounds read in Skia",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-126883",
+      "severity": "high",
+      "title": "Use after free in Core",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-126840",
+      "severity": "high",
+      "title": "Out of bounds write in Network",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-126848",
+      "severity": "high",
+      "title": "Uninitialized resource in Skia",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-126882",
+      "severity": "high",
+      "title": "Information leak in Skia",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-126906",
+      "severity": "high",
+      "title": "Race condition in Extensions",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-126915",
+      "severity": "high",
+      "title": "Use of uninitialized variable in Skia",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-126893",
+      "severity": "high",
+      "title": "Out of bounds write in V8",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-126855",
+      "severity": "high",
+      "title": "Missing authorization in ImageCapture",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-126908",
+      "severity": "high",
+      "title": "Type confusion in V8",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-126849",
+      "severity": "high",
+      "title": "Type confusion in V8",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-126901",
+      "severity": "high",
+      "title": "Use after free in PDF",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-126852",
+      "severity": "high",
+      "title": "Use after free in MediaStream",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-126850",
+      "severity": "high",
+      "title": "Incorrect authorization in SiteIsolation",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-126841",
+      "severity": "high",
+      "title": "Out of bounds read in Skia",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-126902",
+      "severity": "high",
+      "title": "Incorrect reference resolution in Browser",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-126868",
+      "severity": "high",
+      "title": "Type confusion in V8",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-126921",
+      "severity": "high",
+      "title": "Use after free in Accessibility",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-126913",
+      "severity": "high",
+      "title": "Out of bounds read in Compositing",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-126890",
+      "severity": "high",
+      "title": "Out of bounds read in Media",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-126860",
+      "severity": "high",
+      "title": "Incorrect authorization in FileSystem",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-126920",
+      "severity": "high",
+      "title": "Information leak in Skia",
+      "in_the_wild": false
+     },
+     {
+      "cve": "CVE-2026-126899",
+      "severity": "high",
+      "title": "Use after free in Elements",
+      "in_the_wild": false
+     }
+    ]
+   }
+  ],
+  "checked": "2026-11-14"
+ }
+}
