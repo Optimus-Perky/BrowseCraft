@@ -1,9 +1,9 @@
 [package]
-name = "browsecraft-server"
+name = "altbrowse-server"
 version = "0.1.0"
 edition = "2024"
 license = "BSD-3-Clause"
-description = "BrowseCraft sync server: your own Chrome sync, for your home lab"
+description = "AltBrowse sync server: your own Chrome sync, for your home lab"
 publish = false
 
 [dependencies]

@@ -313,7 +313,7 @@ class SignInRequest {
       std::move(callback_).Run(
           false, "This computer has no Windows sign-in the server accepts.");
     } else {
-      std::move(callback_).Run(false, "That isn't a BrowseCraft server (it "
+      std::move(callback_).Run(false, "That isn't an AltBrowse server (it "
                                       "answered " +
                                           base::NumberToString(code) + ").");
     }

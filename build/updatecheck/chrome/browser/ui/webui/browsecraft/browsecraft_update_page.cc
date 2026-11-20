@@ -23,7 +23,7 @@ const char kSection[] = R"(
     <h2>Updates</h2>
     <p id="update-line" class="note"></p>
     <label class="check"><input type="checkbox" id="update-enabled">
-      Check for a new BrowseCraft once a day</label>
+      Check for a new AltBrowse once a day</label>
     <p class="hint">A plain request for a small public file: no cookies, nothing
     about you or this PC. Security updates open a tab; other updates only show
     in the menu and on the About page. Nothing is downloaded or installed.</p>
@@ -80,13 +80,13 @@ constexpr char kUpdatePage[] = R"(<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>BrowseCraft update</title>
+<title>AltBrowse update</title>
 <link rel="stylesheet" href="/browsecraft.css">
 <script src="/update.js"></script>
 </head>
 <body>
 <main class="wide">
-  <h1>BrowseCraft update</h1>
+  <h1>AltBrowse update</h1>
   <div id="update"><p class="note">Looking…</p></div>
 </main>
 </body>
@@ -127,10 +127,10 @@ function settings(s) {
         'Update checks are off.';
   } else if (u.wanted) {
     line.append((u.latest.security.update ? 'Security update available: ' :
-                 'Update available: ') + 'BrowseCraft v' + u.latest.version + '. ',
+                 'Update available: ') + 'AltBrowse v' + u.latest.version + '. ',
                 link('Details', 'chrome://browsecraft/update'));
   } else {
-    line.textContent = 'BrowseCraft v' + u.running + (u.lastCheck ?
+    line.textContent = 'AltBrowse v' + u.running + (u.lastCheck ?
         ': up to date when last checked (' + u.lastCheck + ').' :
         ': not checked yet.');
   }
@@ -141,10 +141,10 @@ function update(s) {
   const u = s.update;
   root.textContent = '';
   if (!u.latest || !u.newer) {
-    root.append(el('p', 'lead', 'BrowseCraft v' + u.running + ' is the newest version' +
+    root.append(el('p', 'lead', 'AltBrowse v' + u.running + ' is the newest version' +
         (u.lastCheck ? ' (checked ' + u.lastCheck + ').' : '.')));
     root.append(el('p', 'foot'));
-    root.lastChild.append(link('BrowseCraft settings', 'chrome://browsecraft/'));
+    root.lastChild.append(link('AltBrowse settings', 'chrome://browsecraft/'));
     return;
   }
   const l = u.latest, sec = l.security;
@@ -152,10 +152,10 @@ function update(s) {
     root.append(el('div', sec.inTheWild ? 'banner wild' : 'banner',
         sec.inTheWild ?
             'Security update. One of the flaws it fixes is already being used ' +
-            'in attacks: update BrowseCraft now.' :
-            'Security update. Please update BrowseCraft soon.'));
+            'in attacks: update AltBrowse now.' :
+            'Security update. Please update AltBrowse soon.'));
   }
-  root.append(el('p', 'lead', 'BrowseCraft v' + l.version + ' (Chromium ' + l.chromium +
+  root.append(el('p', 'lead', 'AltBrowse v' + l.version + ' (Chromium ' + l.chromium +
       ') is available' + (l.released ? ', released ' + l.released : '') +
       '. You have v' + u.running + '.'));
   if (sec.update) {
@@ -174,7 +174,7 @@ function update(s) {
       for (const r of sec.references) src.append(' ', link('[notes]', r, true));
       src.append('.');
     } else if (sec.source === 'browsecraft') {
-      src.textContent = 'A security fix in BrowseCraft itself.';
+      src.textContent = 'A security fix in AltBrowse itself.';
     } else {
       src.textContent = 'Security details unavailable: treat it as a security update.';
     }
@@ -184,10 +184,10 @@ function update(s) {
     root.append(el('p', 'note', 'Not a security update.'));
   }
   const dl = el('p');
-  dl.append(link('Download BrowseCraft v' + l.version, l.page, true));
+  dl.append(link('Download AltBrowse v' + l.version, l.page, true));
   dl.firstChild.className = 'button';
   root.append(dl);
-  root.append(el('p', 'note', 'BrowseCraft never downloads or installs updates by itself.'));
+  root.append(el('p', 'note', 'AltBrowse never downloads or installs updates by itself.'));
   const skip = el('div', 'skip');
   const label = el('label', 'check');
   const box = el('input');
@@ -196,13 +196,13 @@ function update(s) {
   box.checked = u.skipped;
   box.addEventListener('change', () => chrome.send('setUpdateSkipped', [box.checked]));
   label.append(box, 'Skip this version');
-  skip.append(label, el('p', 'hint', 'Ticked, BrowseCraft will not tell you about v' +
+  skip.append(label, el('p', 'hint', 'Ticked, AltBrowse will not tell you about v' +
       l.version + ' again: no tab, no menu item, nothing on the About page. You will ' +
       'still be told about the next version.'));
   root.append(skip);
   const foot = el('p', 'foot');
   foot.append(link('Full change history', s.changes + '#v' + l.version, true), ' · ',
-              link('BrowseCraft settings', 'chrome://browsecraft/'));
+              link('AltBrowse settings', 'chrome://browsecraft/'));
   root.append(foot);
 }
 window.browsecraftUpdate = {

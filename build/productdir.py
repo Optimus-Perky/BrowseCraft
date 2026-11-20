@@ -8,10 +8,10 @@ EDITS = {
         ('.base_app_name = L"Chromium",', '.base_app_name = L"BrowseCraft",'),
         ('.base_app_id = L"Chromium",', '.base_app_id = L"BrowseCraft",'),
         ('.browser_prog_id_prefix = L"ChromiumHTM",', '.browser_prog_id_prefix = L"BCraftHTM",'),
-        ('L"Chromium HTML Document",', 'L"BrowseCraft HTML Document",'),
+        ('L"Chromium HTML Document",', 'L"AltBrowse HTML Document",'),
         ('.direct_launch_url_scheme = "chromium",', '.direct_launch_url_scheme = "browsecraft",'),
         ('.pdf_prog_id_prefix = L"ChromiumPDF",', '.pdf_prog_id_prefix = L"BCraftPDF",'),
-        ('L"Chromium PDF Document",', 'L"BrowseCraft PDF Document",'),
+        ('L"Chromium PDF Document",', 'L"AltBrowse PDF Document",'),
     ],
     "chrome/common/chrome_paths_linux.cc": [
         ('  std::string data_dir_basename = "chromium";', '  std::string data_dir_basename = "browsecraft";'),

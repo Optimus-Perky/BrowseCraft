@@ -1,5 +1,5 @@
 #!/bin/sh
-# Makes BrowseCraft's icons in Chromium's layout (out/<path in the Chromium tree>), from
+# Makes AltBrowse's icons in Chromium's layout (out/<path in the Chromium tree>), from
 # browsecraft-logo.svg (48 px and up) and browsecraft-logo-small.svg (16-32 px).
 # Needs resvg (RESVG=path) and ImageMagick's convert (CONVERT="docker run ... convert" works).
 set -e
@@ -39,7 +39,7 @@ for scale in 1 2; do
   for variant in dark white; do
     colour=$([ $variant = white ] && echo white || echo "#202124")
     name=$([ $variant = white ] && echo product_logo_name_22_white.png || echo product_logo_name_22.png)
-    $CONVERT -background none -fill "$colour" -font /usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf -pointsize $((15 * scale)) label:BrowseCraft PNG32:work/text.png
+    $CONVERT -background none -fill "$colour" -font /usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf -pointsize $((15 * scale)) label:AltBrowse PNG32:work/text.png
     $CONVERT work/$([ $scale = 1 ] && echo s22.png || echo f48.png) -resize ${h}x${h} work/logo.png
     $CONVERT work/text.png -background none -gravity west -splice $((4 * scale))x0 +repage PNG32:work/text2.png
     $CONVERT work/logo.png work/text2.png -background none -gravity center +append +repage PNG32:out/$dir/$name

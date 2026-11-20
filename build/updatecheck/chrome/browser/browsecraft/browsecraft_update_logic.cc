@@ -153,8 +153,12 @@ std::optional<UpdateInfo> ParseManifest(std::string_view json,
   if (root->FindInt("schema") != kSchema) {
     return std::nullopt;
   }
+  // "BrowseCraft" is the product id every installed copy checks for (renamed
+  // AltBrowse on 20 Nov 2026; the id stays so older copies still see updates).
+  // "AltBrowse" is taken too, so the file can switch once no BrowseCraft-era
+  // copy is left.
   const std::string* product = root->FindString("product");
-  if (!product || *product != "BrowseCraft") {
+  if (!product || (*product != "BrowseCraft" && *product != "AltBrowse")) {
     return std::nullopt;
   }
   UpdateInfo info;

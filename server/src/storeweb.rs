@@ -257,8 +257,8 @@ const INSTALL_JS: &str = r#"<script>
 async function install(btn){
   const id=btn.dataset.id, st=document.getElementById('s-'+id);
   const w=chrome&&chrome.webstorePrivate;
-  if(!w){st.textContent='Open this page in BrowseCraft to install.';return}
-  btn.disabled=true; st.textContent='Asking BrowseCraft...';
+  if(!w){st.textContent='Open this page in AltBrowse to install.';return}
+  btn.disabled=true; st.textContent='Asking AltBrowse...';
   // No iconUrl: Chromium fetches it as a public site with local-network access blocked, and
   // treats a data: URL as failed too, so a store on the LAN would get "Image decode failed".
   // The dialog shows a generic icon; the extension brings its own once installed.
@@ -357,7 +357,7 @@ async fn store_page(State(app): State<App>, h: HeaderMap, RawQuery(raw): RawQuer
         let action = if *mode == "install" {
             "<span class=d>Installed for you by your organisation</span>".to_string()
         } else {
-            format!("<button data-id={id} data-name=\"{n}\" data-manifest=\"{manifest}\" onclick=install(this)>Add to BrowseCraft</button>", id = esc(&it.id), n = esc(&it.name))
+            format!("<button data-id={id} data-name=\"{n}\" data-manifest=\"{manifest}\" onclick=install(this)>Add to AltBrowse</button>", id = esc(&it.id), n = esc(&it.name))
         };
         body.push_str(&format!(
             "<div class=card id=ext-{id}><img src=/ext/icon/{id} alt=\"\" width=48 height=48 style=\"float:left;margin:0 1em 0 0\"><h2 style=margin:0>{n}</h2>\

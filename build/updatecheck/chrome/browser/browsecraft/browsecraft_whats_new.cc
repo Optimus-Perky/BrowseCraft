@@ -127,11 +127,11 @@ std::string Page(const std::string& from) {
   const std::string anchor = show.empty() ? std::string() : "#v" + show.front();
   std::string intro =
       show.empty()
-          ? "BrowseCraft v" + running + "."
+          ? "AltBrowse v" + running + "."
       : from.empty()
-          ? "BrowseCraft v" + running + " and the releases before it on Chromium " +
+          ? "AltBrowse v" + running + " and the releases before it on Chromium " +
                 major + ", newest first."
-          : "BrowseCraft was updated from v" + base::EscapeForHTML(from) +
+          : "AltBrowse was updated from v" + base::EscapeForHTML(from) +
                 " to v" + running + "." +
                 (show.size() > 1 ? " Every release since is listed, newest first."
                                  : "");
@@ -139,12 +139,12 @@ std::string Page(const std::string& from) {
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>What's new in BrowseCraft</title>
+<title>What's new in AltBrowse</title>
 <link rel="stylesheet" href="/browsecraft.css">
 </head>
 <body>
 <main class="wide">
-  <h1>What's new in BrowseCraft</h1>
+  <h1>What's new in AltBrowse</h1>
   <p class="lead">)") +
          intro + R"(</p>
 )" + (body.empty() ? "<p class=\"note\">No release notes are bundled with this build.</p>\n"

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""BrowseCraft's release notes: one JSON file per version in release-notes/, and the one renderer
+"""AltBrowse's (BrowseCraft's until 0.8.261120.1) release notes: one JSON file per version in release-notes/, and the one renderer
 for both places they are read (13 Nov 2026), so the two can never differ:
   - the "What's new" tab the browser opens after an update (bundled into the build, offline)
   - the change history page on the download site (built when a release is published)
@@ -59,6 +59,14 @@ def vkey(v):
         return (int(m.group(1)), int(m.group(2)), int(m.group(3)), 0,
                 ord(m.group(4)) - 96 if m.group(4) else 0)
     raise ValueError(f"not a BrowseCraft version: {v}")
+
+
+RENAMED = "0.8.261120.1"  # the first version called AltBrowse (20 Nov 2026); earlier ones were BrowseCraft
+
+
+def product(v):
+    """The name a version shipped under."""
+    return "AltBrowse" if vkey(v) >= vkey(RENAMED) else "BrowseCraft"
 
 
 def load(version):
@@ -132,7 +140,7 @@ def render(e):
     """One version as an HTML fragment: the tab and the site page both show exactly this."""
     v = e["version"]
     out = [f'<section class="release" id="v{esc(v)}">',
-           f'<h2>BrowseCraft v{esc(v)}</h2>']
+           f'<h2>{product(v)} v{esc(v)}</h2>']
     meta = f"{esc(long_date(e['date']))} · Chromium {esc(e['chromium'])}"
     if e.get("chromium_from") and e["chromium_from"] != e["chromium"]:
         meta += f" (updated from {esc(e['chromium_from'])})"
@@ -241,9 +249,9 @@ def site(out_dir, version, template):
     t = open(template).read()
     head, rest = t.split('<main class="wrap">', 1)
     foot = rest.split("</main>", 1)[1]
-    head = re.sub(r"<title>[^<]*</title>", "<title>BrowseCraft change history - AltCraft</title>", head)
+    head = re.sub(r"<title>[^<]*</title>", "<title>AltBrowse change history - AltCraft</title>", head)
     head = re.sub(r'<meta name="description" content="[^"]*">',
-                  '<meta name="description" content="Every BrowseCraft version: what is new, what was '
+                  '<meta name="description" content="Every AltBrowse (formerly BrowseCraft) version: what is new, what was '
                   'fixed and the security fixes applied.">', head)
     head = head.replace('<link rel="stylesheet" href="/style.css">',
                         '<link rel="stylesheet" href="/style.css">\n'
@@ -253,9 +261,10 @@ def site(out_dir, version, template):
     if drafts:
         sys.exit(f"draft release notes not reviewed: {', '.join(drafts)}")
     body = ['<main class="wrap">', '<section class="page">',
-            '<h1><img src="/img/browsecraft-logo.svg" alt="">BrowseCraft change history</h1>',
-            '<p class="lede">Every BrowseCraft version, newest first: what is new, what was fixed, and '
-            'the Chromium security fixes it brought. <a href="/browsecraft/">Back to BrowseCraft</a></p>']
+            '<h1><img src="/img/browsecraft-logo.svg" alt="">AltBrowse change history</h1>',
+            '<p class="lede">Every AltBrowse version (called BrowseCraft until v0.8.261120.1), newest first: '
+            'what is new, what was fixed, and the Chromium security fixes it brought. '
+            '<a href="/altbrowse/">Back to AltBrowse</a></p>']
     body += [render(e) for e in shown]
     body += ["</section>", "</main>"]
     os.makedirs(out_dir, exist_ok=True)

@@ -16,7 +16,7 @@ pub(crate) fn esc(s: &str) -> String {
 
 pub(crate) fn page(title: &str, body: &str) -> Response {
     let html = format!(
-        "<!doctype html><html lang=en><meta charset=utf-8><meta name=viewport content=\"width=device-width,initial-scale=1\"><title>{t} - BrowseCraft sync</title>\
+        "<!doctype html><html lang=en><meta charset=utf-8><meta name=viewport content=\"width=device-width,initial-scale=1\"><title>{t} - AltBrowse sync</title>\
 <style>:root{{color-scheme:light dark;--a:#2f6f5e;--t:#1f2328;--d:#5b636b;--b:#f6f7f8;--c:#fff;--l:#d9dde1}}\
 @media(prefers-color-scheme:dark){{:root{{--a:#5fb39b;--t:#e6e8ea;--d:#a3aab1;--b:#1c1f22;--c:#25292d;--l:#3a3f44}}}}\
 body{{margin:0;background:var(--b);color:var(--t);font:15px/1.5 system-ui,sans-serif}}main{{max-width:46em;margin:3em auto;padding:0 1em}}\
@@ -61,8 +61,8 @@ pub async fn home(State(app): State<App>, h: HeaderMap) -> Response {
     }
     page(
         "Welcome",
-        "<h1>BrowseCraft sync server</h1><div class=card><p>This server keeps BrowseCraft browsers in step: bookmarks, passwords, history, open tabs, extensions and settings.</p>\
-<p>In BrowseCraft, go to <b>chrome://browsecraft</b> and sign in with this server's address and your user name.</p></div>\
+        "<h1>AltBrowse sync server</h1><div class=card><p>This server keeps AltBrowse browsers in step: bookmarks, passwords, history, open tabs, extensions and settings.</p>\
+<p>In AltBrowse, go to <b>chrome://browsecraft</b> and sign in with this server's address and your user name.</p></div>\
 <div class=card><h3>Admin</h3><form method=post action=/admin/sign-in><label>User name<input type=text name=user autocomplete=username></label>\
 <label>Password<input type=password name=password autocomplete=current-password></label><button>Sign in</button></form></div>",
     )
@@ -72,7 +72,7 @@ fn setup_page(error: &str) -> Response {
     page(
         "Set up",
         &format!(
-            "<h1>Set up BrowseCraft sync</h1><div class=card><p>Make the first user. They are the admin: they can add the others.</p>{}\
+            "<h1>Set up AltBrowse sync</h1><div class=card><p>Make the first user. They are the admin: they can add the others.</p>{}\
 <form method=post action=/setup><label>User name<input type=text name=user autocomplete=username></label>\
 <label>Password (at least 8 characters)<input type=password name=password autocomplete=new-password></label><button>Create</button></form></div>",
             if error.is_empty() { String::new() } else { format!("<p class=err>{}</p>", esc(error)) }
@@ -178,7 +178,7 @@ async fn admin_view(app: &App, h: &HeaderMap, note: &str) -> Response {
     page(
         "Admin",
         &format!(
-            "<p style=float:right><a href=/admin/sign-out>Sign out</a></p><h1>BrowseCraft sync</h1>{}{domain}\
+            "<p style=float:right><a href=/admin/sign-out>Sign out</a></p><h1>AltBrowse sync</h1>{}{domain}\
 <div class=card><h3>Users</h3><table><tr><th>User</th><th>Items</th><th>Devices</th><th></th></tr>{rows}</table></div>\
 <div class=card><h3>Add a user</h3><form method=post action=/admin/add><label>User name<input type=text name=user></label>\
 <label>Password (at least 8 characters)<input type=password name=password autocomplete=new-password></label>\

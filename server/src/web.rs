@@ -50,7 +50,7 @@ fn router_for(app: App) -> Router {
 
 pub async fn serve(db: Connection, listen: &str, ldap: Option<ldap::Config>) -> Result<(), String> {
     let listener = tokio::net::TcpListener::bind(listen).await.map_err(|e| format!("could not listen on {listen}: {e}"))?;
-    eprintln!("BrowseCraft sync server on {listen}");
+    eprintln!("AltBrowse sync server on {listen}");
     match &ldap {
         Some(c) => eprintln!("Domain sign-in: {}", c.describe()),
         None => eprintln!("Domain sign-in: off (set BROWSECRAFT_LDAP_URL to use it)"),

@@ -1,4 +1,6 @@
-# BrowseCraft for Windows: cross-compiled on Linux
+# AltBrowse for Windows: cross-compiled on Linux
+
+> Renamed **AltBrowse** on 20 Nov 2026 (was BrowseCraft). Older entries below keep the old name; paths, ids and settings that kept it are listed in the top README ("The rename").
 
 1. **Toolchain** (once, on a Windows VM): Visual Studio 2026 Build Tools (C++ workload, ATL/MFC,
    ARM64 VC + MFC ARM64, which Chromium's packager insists on) and Windows SDK 10.0.28000 with

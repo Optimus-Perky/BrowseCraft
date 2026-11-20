@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- The BrowseCraft installer: BrowseCraft-v<version>.exe, a WiX Burn bundle carrying
-     browsecraft.msi. The name carries BrowseCraft's version (v0.8.261013.1); the file's
-     properties carry the installer's (155.0.8059.<n>, which upgrades compare). It is the one entry
+<!-- The AltBrowse installer: AltBrowse-<version>-x64.exe, a WiX Burn bundle carrying
+     browsecraft.msi. The name carries AltBrowse's version (0.8.261120.1); the file's
+     properties carry the installer's (157.0.8103.<n>, which upgrades compare). It is the one entry
      in Add/Remove Programs. A newer one upgrades in place; the folder can be chosen under
-     Options, and an upgrade keeps the folder BrowseCraft is already in. -->
+     Options, and an upgrade keeps the folder the browser is already in.
+
+     AltBrowse was BrowseCraft until 20 Nov 2026: the UpgradeCode and the HKLM\Software\BrowseCraft
+     key stay, so this bundle replaces an installed BrowseCraft bundle (one Programs entry, renamed)
+     and keeps its folder. -->
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
      xmlns:bal="http://schemas.microsoft.com/wix/BalExtension"
      xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
-  <Bundle Name="BrowseCraft" Version="$(var.Version)" Manufacturer="BrowseCraft"
+  <Bundle Name="AltBrowse" Version="$(var.Version)" Manufacturer="AltBrowse"
           UpgradeCode="a85c1e37-2f90-4b6d-9d43-7e01b6f8c252"
           IconSourceFile="$(var.BuildDir)/browsecraft.ico"
           AboutUrl="https://altcraft.perkin.me.uk/browsecraft"
-          Copyright="BrowseCraft: Chromium and ungoogled-chromium (BSD) with BrowseCraft's changes.">
+          Copyright="AltBrowse: Chromium and ungoogled-chromium (BSD) with AltBrowse's changes.">
     <BootstrapperApplicationRef Id="WixStandardBootstrapperApplication.HyperlinkLicense">
       <bal:WixStandardBootstrapperApplication LicenseUrl="" LogoFile="$(var.BuildDir)/logo.png"
           SuppressOptionsUI="no" LaunchTarget="[InstallFolder]\chrome.exe" />
@@ -20,7 +24,7 @@
     <!-- Program Files, unless it is already installed somewhere. A registry search that finds
          nothing UNSETS its variable (it does not leave it alone), so the folder is only read
          when it exists: otherwise the Launch button pointed at "\chrome.exe" (2026-10-12). -->
-    <Variable Name="InstallFolder" Type="string" Value="[ProgramFiles64Folder]BrowseCraft" />
+    <Variable Name="InstallFolder" Type="string" Value="[ProgramFiles64Folder]AltBrowse" />
     <util:RegistrySearch Id="PreviousFolderExists" Root="HKLM" Key="Software\BrowseCraft" Value="InstallDir"
                          Result="exists" Variable="PreviousFolderExists" Win64="yes" />
     <util:RegistrySearch Id="PreviousFolder" After="PreviousFolderExists" Condition="PreviousFolderExists"

@@ -398,9 +398,9 @@ std::u16string UpdateChecker::MenuLabel() const {
     return std::u16string();
   }
   return info->security.update
-             ? u"Security update: BrowseCraft v" +
+             ? u"Security update: AltBrowse v" +
                    base::UTF8ToUTF16(info->version)
-             : u"Update available: BrowseCraft v" +
+             : u"Update available: AltBrowse v" +
                    base::UTF8ToUTF16(info->version);
 }
 
@@ -410,10 +410,10 @@ void UpdateChecker::AddAboutStrings(content::WebUIDataSource* source) const {
   std::u16string text;
   if (show) {
     text = info->security.update
-               ? u"Security update available: BrowseCraft v" +
+               ? u"Security update available: AltBrowse v" +
                      base::UTF8ToUTF16(info->version) + u" (Chromium " +
                      base::UTF8ToUTF16(info->chromium) + u")."
-               : u"Update available: BrowseCraft v" +
+               : u"Update available: AltBrowse v" +
                      base::UTF8ToUTF16(info->version) + u" (Chromium " +
                      base::UTF8ToUTF16(info->chromium) + u").";
   }

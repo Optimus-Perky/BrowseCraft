@@ -1,4 +1,6 @@
-# Building BrowseCraft
+# Building AltBrowse
+
+> Renamed **AltBrowse** on 20 Nov 2026 (was BrowseCraft). Older entries below keep the old name; paths, ids and settings that kept it are listed in the top README ("The rename").
 
 From Chromium 157 (13 Nov 2026, "the middle way"): **Chromium's own release tarball**, plus
 **ungoogled-chromium's core** patches, lists and flags, vendored unchanged and pinned in

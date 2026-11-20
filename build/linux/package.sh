@@ -1,12 +1,13 @@
 #!/bin/bash
-# The Linux tarball, browsecraft-<chromium>-v<version>-linux-x64.tar.xz, from a built Linux tree.
-#   package.sh <linux src> <out dir> <chromium version> <browsecraft version>
+# The Linux tarball, altbrowse-<chromium>-v<version>-linux-x64.tar.xz, from a built Linux tree
+# (browsecraft-... before the rename to AltBrowse, 20 Nov 2026).
+#   package.sh <linux src> <out dir> <chromium version> <version>
 # Runs in chromium-builder. File list from ungoogled-chromium-portablelinux package.sh
 # (156.0.8078.79-1); no AppImage. install-desktop-entry.sh adds a menu entry for the user.
 set -euo pipefail
 SRC=$1; OUTDIR=$2; CHROMIUM=$3; VER=$4
 O=$SRC/out/Default
-N=browsecraft-$CHROMIUM-v$VER-linux-x64
+N=altbrowse-$CHROMIUM-v$VER-linux-x64
 R=$OUTDIR/$N
 rm -rf "$R" && mkdir -p "$R"
 missing=0
@@ -19,26 +20,28 @@ done
 for f in chrome resources.pak icudtl.dat v8_context_snapshot.bin locales; do
   [ -e "$R/$f" ] || { echo "the package has no $f" >&2; exit 1; }
 done
-cp "$SRC/chrome/app/theme/chromium/linux/product_logo_256.png" "$R/browsecraft.png"
+cp "$SRC/chrome/app/theme/chromium/linux/product_logo_256.png" "$R/altbrowse.png"
 cat > "$R/install-desktop-entry.sh" <<"EOS"
 #!/bin/sh
-# Adds BrowseCraft to your desktop menu, run from wherever you unpacked it.
+# Adds AltBrowse to your desktop menu, run from wherever you unpacked it. The entry keeps its
+# old file name (browsecraft.desktop, from before the rename), so it replaces a BrowseCraft one.
+# The profile stays in ~/.config/browsecraft.
 HERE="$(cd "$(dirname "$0")" && pwd)"
 mkdir -p "$HOME/.local/share/applications"
 cat > "$HOME/.local/share/applications/browsecraft.desktop" <<EOD
 [Desktop Entry]
 Type=Application
-Name=BrowseCraft
+Name=AltBrowse
 GenericName=Web Browser
 Comment=Your own browser, synced to your own server
 Exec="$HERE/chrome" %U
-Icon=$HERE/browsecraft.png
+Icon=$HERE/altbrowse.png
 Terminal=false
 Categories=Network;WebBrowser;
 MimeType=text/html;x-scheme-handler/http;x-scheme-handler/https;
 StartupWMClass=BrowseCraft
 EOD
-echo "Added BrowseCraft to the menu (~/.local/share/applications/browsecraft.desktop)."
+echo "Added AltBrowse to the menu (~/.local/share/applications/browsecraft.desktop)."
 EOS
 chmod +x "$R/install-desktop-entry.sh"
 cd "$OUTDIR" && tar cf - "$N" | xz -T4 -6 > "$N.tar.xz" && rm -rf "$N"

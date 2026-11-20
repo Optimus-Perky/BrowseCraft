@@ -1,0 +1,22 @@
+{
+ "version": "0.8.261120.1",
+ "date": "2026-11-20",
+ "chromium": "157.0.8103.81",
+ "chromium_from": "157.0.8103.80",
+ "new": [
+  "BrowseCraft is now called AltBrowse. Nothing to do: the update installs over BrowseCraft, keeps your profiles, bookmarks, passwords, extensions and settings exactly as they were, and renames the Start menu and desktop shortcuts.",
+  "Chromium updated to 157.0.8103.81."
+ ],
+ "fixed": [
+  "Widevine (what Netflix, Spotify and Audible need) is now replaced in one piece when it updates, so an update while AltBrowse is open can no longer leave it half-copied."
+ ],
+ "security": {
+  "source": "unavailable",
+  "fixes": 0,
+  "highest": "unknown",
+  "in_the_wild": false,
+  "scope": "range",
+  "releases": [],
+  "checked": "2026-11-20"
+ }
+}

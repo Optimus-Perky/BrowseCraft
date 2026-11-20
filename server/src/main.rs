@@ -49,7 +49,7 @@ fn run() -> Result<(), String> {
                         store::add_user(&db, &u, &p, true)?;
                         eprintln!("Made the first user, {u} (admin).");
                     }
-                    _ => eprintln!("No users yet: run `browsecraft-server add-user NAME --admin`, or open the web page to make the first one."),
+                    _ => eprintln!("No users yet: run `altbrowse-server add-user NAME --admin`, or open the web page to make the first one."),
                 }
             }
             let listen = env("BROWSECRAFT_LISTEN", "0.0.0.0:8295");
@@ -87,7 +87,7 @@ fn run() -> Result<(), String> {
             Ok(())
         }
         "--version" | "version" => {
-            println!("browsecraft-server {}", env!("CARGO_PKG_VERSION"));
+            println!("altbrowse-server {}", env!("CARGO_PKG_VERSION"));
             Ok(())
         }
         other => Err(format!("unknown command {other}; try serve, add-user, set-password, delete-user, users")),
@@ -96,7 +96,7 @@ fn run() -> Result<(), String> {
 
 fn main() {
     if let Err(e) = run() {
-        eprintln!("browsecraft-server: {e}");
+        eprintln!("altbrowse-server: {e}");
         std::process::exit(1);
     }
 }

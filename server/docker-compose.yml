@@ -1,11 +1,13 @@
-# BrowseCraft sync server: `docker compose up -d`, then open http://<host>:8295 to make the
+# AltBrowse sync server: `docker compose up -d`, then open http://<host>:8295 to make the
 # first (admin) user. Put it behind your reverse proxy with HTTPS before using it outside
 # your LAN: browsers send their sign-in token with every request.
+# From a BrowseCraft-era server (container browsecraft-sync): `docker rm -f browsecraft-sync`, then
+# `docker compose up -d` here; ./data and the BROWSECRAFT_* settings carry over unchanged.
 services:
-  browsecraft-sync:
-    image: browsecraft-server:latest
+  altbrowse-sync:
+    image: altbrowse-server:latest
     build: .
-    container_name: browsecraft-sync
+    container_name: altbrowse-sync
     restart: unless-stopped
     ports:
       - "8295:8295"
@@ -19,13 +21,13 @@ services:
     #   BROWSECRAFT_LDAP_DOMAIN: example.lan
     #   BROWSECRAFT_LDAP_CA_FILE: /data/ldap-ca.pem
     #   BROWSECRAFT_LDAP_ADMIN_GROUP: Domain Admins   # "none" for no domain admins
-    #   BROWSECRAFT_LDAP_USER_GROUP: BrowseCraft Users  # leave out to let any enabled user in
+    #   BROWSECRAFT_LDAP_USER_GROUP: AltBrowse Users  # leave out to let any enabled user in
     # Single sign-on from domain PCs (Kerberos): give the server a DNS name (e.g. browsecraft.example.lan),
     # make a service account with the SPN HTTP/<that name> and AES keys, put its keytab in ./data and
     # its password in ./data/ldap-bind-password (0600; for reading users' entries), then:
     #   KRB5_KTNAME: /data/browsecraft.keytab
     #   BROWSECRAFT_LDAP_BIND_USER: svc-browsecraft
     #   BROWSECRAFT_LDAP_BIND_PASSWORD_FILE: /data/ldap-bind-password
-    # and point the BrowseCraft policy SyncServerUrl at http(s)://<that name>:8295.
+    # and point the AltBrowse policy SyncServerUrl at http(s)://<that name>:8295.
     # Windows DCs with a self-signed LDAPS certificate: put it in LocalMachine\My AND in the DC's
     # own LocalMachine\Root, or Schannel won't use it ("No suitable default server credential").

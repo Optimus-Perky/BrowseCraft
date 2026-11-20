@@ -1,4 +1,6 @@
-# BrowseCraft policies
+# AltBrowse policies
+
+> Renamed **AltBrowse** on 20 Nov 2026 (was BrowseCraft). Older entries below keep the old name; paths, ids and settings that kept it are listed in the top README ("The rename").
 
 BrowseCraft's own settings. (Chromium's own policies, such as ExtensionInstallForcelist or
 URLBlocklist, still work as in Chromium.)

@@ -77,7 +77,7 @@ VER=$(python3 build/version.py next)
 CHROMIUM=$($SSH "sed -n 's/^MAJOR=//p;s/^MINOR=//p;s/^BUILD=//p;s/^PATCH=//p' $W/chrome/VERSION" | paste -sd.)
 say "BrowseCraft v$VER (Chromium $CHROMIUM)"
 $SCP build/version.py "$BUILD_HOST:$B/version.py"
-$SSH "docker run --rm -u 1000:1000 -v $W:/src -v $B/version.py:/version.py $IMAGE python3 /version.py stamp /src $VER"
+$SSH "docker run --rm --name claude-bc-stamp -u 1000:1000 -v $W:/src -v $B/version.py:/version.py $IMAGE python3 /version.py stamp /src $VER"
 fi
 
 # 3. Build: only what changed.
@@ -94,7 +94,7 @@ say "built in $(( ($(date +%s) - t0) / 60 )) min so far"
 
 # 4. Zip.
 ZIP=browsecraft-$CHROMIUM-v$VER-windows-x64.zip
-$SSH "docker run --rm -u 1000:1000 -v $W:/src -v $R:/repo:ro -w /src $IMAGE \
+$SSH "docker run --rm --name claude-bc-zip -u 1000:1000 -v $W:/src -v $R:/repo:ro -w /src $IMAGE \
   python3 /repo/third_party/ungoogled-chromium/utils/filescfg.py -c chrome/tools/build/win/FILES.cfg --build-outputs out/Win --cpu-arch 64bit archive -o /src/out/$ZIP"
 mkdir -p dist
 $SCP "$BUILD_HOST:$W/out/$ZIP" dist/

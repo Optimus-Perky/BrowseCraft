@@ -247,7 +247,7 @@ async fn entry_for(cfg: &Config, ldap: &mut Ldap, sam: &str) -> Result<DomainUse
     if let Some(g) = &cfg.user_group
         && !member_of(cfg, ldap, &entry.dn, g).await?
     {
-        return Err(Refused::NotAllowed(format!("only members of {g} may use BrowseCraft sync")));
+        return Err(Refused::NotAllowed(format!("only members of {g} may use AltBrowse sync")));
     }
     let is_admin = match &cfg.admin_group {
         Some(g) => member_of(cfg, ldap, &entry.dn, g).await?,

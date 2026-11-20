@@ -1,4 +1,6 @@
-# BrowseCraft artwork
+# AltBrowse artwork
+
+> Renamed **AltBrowse** on 20 Nov 2026 (was BrowseCraft). Older entries below keep the old name; paths, ids and settings that kept it are listed in the top README ("The rename").
 
 All original (drawn for BrowseCraft, 2026), except:
 

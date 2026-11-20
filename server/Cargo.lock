@@ -186,7 +186,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "browsecraft-server"
+name = "altbrowse-server"
 version = "0.1.0"
 dependencies = [
  "argon2",

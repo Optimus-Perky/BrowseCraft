@@ -99,6 +99,10 @@ TEST(BrowseCraftUpdateLogic, RefusesBadManifests) {
   };
   EXPECT_FALSE(ParseManifest(with("\"schema\": 1", "\"schema\": 2"), u));
   EXPECT_FALSE(ParseManifest(with("\"BrowseCraft\"", "\"Chrome\""), u));
+  // The product id: BrowseCraft (what every copy knows) or AltBrowse (the new
+  // name), nothing else.
+  EXPECT_TRUE(ParseManifest(with("\"BrowseCraft\"", "\"AltBrowse\""), u));
+  EXPECT_FALSE(ParseManifest(with("\"BrowseCraft\"", "\"altbrowse\""), u));
   EXPECT_FALSE(ParseManifest(Manifest("0.8.bad"), u));
   EXPECT_FALSE(ParseManifest(with("157.0.8103.50", "157.0"), u));
   EXPECT_FALSE(ParseManifest(

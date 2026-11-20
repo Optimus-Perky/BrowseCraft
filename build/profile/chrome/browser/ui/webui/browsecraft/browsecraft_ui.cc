@@ -28,15 +28,15 @@ constexpr char kPage[] = R"(<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>BrowseCraft</title>
+<title>AltBrowse</title>
 <link rel="stylesheet" href="browsecraft.css">
 <script src="browsecraft.js"></script>
 </head>
 <body>
 <main>
-  <h1>BrowseCraft</h1>
+  <h1>AltBrowse</h1>
   <h2>Sync</h2>
-  <p class="lead">Sign in to your BrowseCraft server and your bookmarks,
+  <p class="lead">Sign in to your AltBrowse server and your bookmarks,
   passwords, history, open tabs, extensions and settings follow you to every
   PC you sign in on. No Google or Microsoft account involved.</p>
   <section id="signed-in" hidden>

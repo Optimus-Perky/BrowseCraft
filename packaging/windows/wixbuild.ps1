@@ -1,4 +1,4 @@
-# Builds BrowseCraft.exe (the installer) in C:\bcbuild from the Windows build zip and the
+# Builds AltBrowse.exe (the installer) in C:\bcbuild from the Windows build zip and the
 # files beside this script. Run by build-installer.sh over SSH.
 param([Parameter(Mandatory = $true)][string]$Version, [Parameter(Mandatory = $true)][string]$BrowseCraftVersion)
 $ErrorActionPreference = "Stop"
@@ -10,7 +10,7 @@ $top = Get-ChildItem "$d\zip" -Directory | Select -First 1
 Move-Item $top.FullName "$d\files"
 Remove-Item "$d\files\setup.exe", "$d\files\mini_installer_exe_version.rc" -Force -ErrorAction SilentlyContinue
 
-# The program carries Chromium's version; the installer adds BrowseCraft's build number.
+# The program carries Chromium's version; the installer adds AltBrowse's build number.
 $chrome = (Get-Item "$d\files\chrome.exe").VersionInfo.FileVersion
 $v = [version]$Version
 if ("$($v.Major).$($v.Minor).$($v.Build)" -ne ($chrome -replace '^(\d+\.\d+\.\d+).*', '$1')) { throw "chrome.exe is $chrome; the installer is $Version" }
@@ -37,7 +37,7 @@ if ($LASTEXITCODE -ne 0) { throw "candle (msi) failed" }
 if ($LASTEXITCODE -ne 0) { throw "light (msi) failed" }
 & C:\wix314\candle.exe -nologo -arch x64 "-dVersion=$Version" "-dBuildDir=$d" -ext WixBalExtension -ext WixUtilExtension -out obj\bundle.wixobj bundle.wxs
 if ($LASTEXITCODE -ne 0) { throw "candle (bundle) failed" }
-& C:\wix314\light.exe -nologo -ext WixBalExtension -ext WixUtilExtension -out BrowseCraft.exe obj\bundle.wixobj
+& C:\wix314\light.exe -nologo -ext WixBalExtension -ext WixUtilExtension -out AltBrowse.exe obj\bundle.wixobj
 if ($LASTEXITCODE -ne 0) { throw "light (bundle) failed" }
-$i = Get-Item "$d\BrowseCraft.exe"
-"  built BrowseCraft.exe (installer) {0:N0} bytes, file version {1}, browser {2}, {3} files" -f $i.Length, $i.VersionInfo.FileVersion, $chrome, (Get-ChildItem "$d\files" -Recurse -File).Count
+$i = Get-Item "$d\AltBrowse.exe"
+"  built AltBrowse.exe (installer) {0:N0} bytes, file version {1}, browser {2}, {3} files" -f $i.Length, $i.VersionInfo.FileVersion, $chrome, (Get-ChildItem "$d\files" -Recurse -File).Count
